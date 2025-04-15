@@ -9,7 +9,7 @@ import logging
 import click
 
 # --- デバッグ用ログインバイパスフラグ ---
-DEBUG_SKIP_LOGIN_CHECK = False
+DEBUG_SKIP_LOGIN_CHECK = False # MUST BE FALSE IN PRODUCTION
 DEBUG_SKIP_LOGIN_EMAIL = "debug@example.com"
 
 app = Flask(__name__)
@@ -668,4 +668,4 @@ if __name__ == '__main__':
     if DEBUG_SKIP_LOGIN_CHECK:
         app.logger.critical("!!! DEBUG LOGIN BYPASS ENABLED !!!")
         app.logger.warning(f"!!! Debug User Email: {DEBUG_SKIP_LOGIN_EMAIL} !!!")
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=False, host='0.0.0.0', port=53833)
