@@ -7,32 +7,52 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> {# 共通CSS #}
     <style>
         /* このページ固有のスタイル（style.cssで定義推奨） */
-        body { font-family: sans-serif; margin: 20px; }
-        .container { max-width: 700px; margin: 0 auto; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
-        .header h1 { margin: 0; }
-        /* アクションリンクの間隔を調整 */
-        .header .actions a { text-decoration: none; padding: 8px 12px; background-color: #6c757d; color: white; border-radius: 4px; font-size: 0.9em; margin-left: 10px; /* リンク間のマージンを追加 */ }
-        .header .actions a:first-child { margin-left: 0; } /* 最初のリンクには左マージン不要 */
-        .flash-messages { list-style: none; padding: 0; margin-bottom: 15px; }
-        .flash-messages li { padding: 10px 15px; margin-bottom: 10px; border-radius: 4px; }
-        .flash-messages .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .flash-messages .danger { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        .flash-messages .warning { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
-        .flash-messages .info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        /* style.cssに基本的なスタイルがあると仮定し、ここでは微調整のみ */
+        body {
+            font-family: sans-serif; /* 基本的なフォント設定 */
+            background-color: #f4f7f6; /* 背景色 */
+            margin: 0;
+            padding: 0;
+            color: #333; /* 基本テキスト色 */
+        }
+        .container { max-width: 700px; margin: 20px auto; background-color: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+        .header h1 { margin: 0; font-size: 1.8em; color: #2c3e50; }
+        .header .actions { display: flex; gap: 10px; } /* リンク間の隙間 */
+        .header .actions a { text-decoration: none; padding: 8px 15px; /* 少し横長に */ color: white; border-radius: 4px; font-size: 0.9em; background-color: #6c757d; /* デフォルト色 */ transition: background-color 0.2s ease; }
+        .header .actions a:hover { background-color: #5a6268; }
+        .header .actions a.dashboard { background-color: #ffc107; color: #212529; } /* ダッシュボードは目立たせる */
+        .header .actions a.dashboard:hover { background-color: #e0a800; }
+
+        /* Flashメッセージ (style.cssにある想定だが、念のため基本スタイル) */
+        .flash-messages { list-style: none; padding: 0; margin-bottom: 20px; }
+        .flash-messages li { padding: 10px 15px; margin-bottom: 10px; border-radius: 4px; border: 1px solid transparent; }
+        .flash-messages .success { color: #155724; background-color: #d4edda; border-color: #c3e6cb; }
+        .flash-messages .error { color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; }
+        .flash-messages .info { color: #0c5460; background-color: #d1ecf1; border-color: #bee5eb; }
+        .flash-messages .warning { color: #856404; background-color: #fff3cd; border-color: #ffeeba; }
+
 
         .settings-section { margin-bottom: 30px; padding: 25px; background-color: #f8f9fa; border-radius: 5px; border: 1px solid #dee2e6;}
-        .settings-section h2 { margin-top: 0; margin-bottom: 20px; font-size: 1.3em; border-bottom: 1px solid #dee2e6; padding-bottom: 10px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .settings-section h2 { margin-top: 0; margin-bottom: 20px; font-size: 1.4em; /* 少し大きく */ border-bottom: 1px solid #dee2e6; padding-bottom: 10px; color: #495057; }
+        .form-group { margin-bottom: 18px; } /* マージン調整 */
+        label { display: block; margin-bottom: 6px; font-weight: bold; color: #495057; font-size: 0.95em; }
         input[type="password"], input[type="text"] {
-            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 1em;
+            width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 4px; box-sizing: border-box; font-size: 1em;
         }
-        /* パスワード入力欄は少し幅を狭めても良いかも */
-        input[type="password"] { max-width: 400px; }
-        button { padding: 12px 20px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1em; }
-        button:hover { background-color: #0056b3; }
-        .api-key-note { font-size: 0.9em; color: #6c757d; margin-top: 5px; }
+        input[type="password"]:focus, input[type="text"]:focus { border-color: #80bdff; outline: 0; box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25); }
+        /* パスワード入力欄の最大幅 */
+        input[type="password"] { max-width: 450px; }
+        button[type="submit"] { /* 共通ボタンスタイルを style.css から継承想定 */
+            padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1em; transition: background-color 0.2s ease;
+        }
+        button[type="submit"]:hover { background-color: #0056b3; }
+        button[type="submit"]:disabled { background-color: #6c757d; cursor: not-allowed; } /* 無効時のスタイル */
+        .api-key-note { font-size: 0.9em; color: #6c757d; margin-top: 8px; line-height: 1.4; }
+        .api-status-message { margin-bottom: 15px; font-weight: bold; font-size: 0.95em; padding: 8px 12px; border-radius: 4px;}
+        .api-status-ok { color: #155724; background-color: #d4edda; border: 1px solid #c3e6cb; }
+        .api-status-warning { color: #856404; background-color: #fff3cd; border: 1px solid #ffeeba; }
+
     </style>
 </head>
 <body>
@@ -40,9 +60,12 @@
         <div class="header">
             <h1>設定</h1>
             <div class="actions">
-                {# === ここにダッシュボードへのリンクを追加 === #}
-                <a href="{{ url_for('dashboard') }}">ダッシュボード</a>
-                <a href="{{ url_for('tasks') }}">課題一覧に戻る</a> {# 課題一覧ページへのリンク #}
+                {# === ダッシュボードへのリンク === #}
+                <a href="{{ url_for('dashboard') }}" class="dashboard">ダッシュボード</a>
+                {# === 課題一覧へのリンク === #}
+                <a href="{{ url_for('tasks') }}">課題一覧</a>
+                {# 必要であれば他のリンクも追加 #}
+                {# <a href="{{ url_for('logout') }}">ログアウト</a> #}
             </div>
         </div>
 
@@ -51,7 +74,7 @@
           {% if messages %}
             <ul class="flash-messages">
             {% for category, message in messages %}
-              <li class="{{ category }}">{{ message }}</li>
+              <li class="{{ category }}">{{ message }}</li> {# カテゴリ名をクラスとして使用 #}
             {% endfor %}
             </ul>
           {% endif %}
@@ -60,44 +83,49 @@
         {# --- パスワード変更セクション --- #}
         <div class="settings-section">
             <h2>パスワード変更</h2>
-            {# パスワード変更フォーム #}
             <form method="post" action="{{ url_for('change_password') }}">
                 <div class="form-group">
                     <label for="current_password">現在のパスワード</label>
                     <input type="password" id="current_password" name="current_password" required>
                 </div>
                 <div class="form-group">
-                    <label for="new_password">新しいパスワード</label>
-                    <input type="password" id="new_password" name="new_password" required>
-                    {# 必要であればパスワード強度要件などを表示 #}
-                    {# <small class="form-text text-muted">8文字以上推奨</small> #}
+                    <label for="new_password">新しいパスワード (6文字以上)</label>
+                    <input type="password" id="new_password" name="new_password" required minlength="6">
                 </div>
                 <div class="form-group">
                     <label for="confirm_password">新しいパスワード（確認）</label>
-                    <input type="password" id="confirm_password" name="confirm_password" required>
+                    <input type="password" id="confirm_password" name="confirm_password" required minlength="6">
                 </div>
                 <button type="submit">パスワードを変更</button>
             </form>
         </div>
 
-        {# --- APIキー設定セクション (将来用) --- #}
+        {# --- APIキー設定セクション --- #}
         <div class="settings-section">
-            <h2>AI APIキー設定 (準備中)</h2>
-            {# ★★★ 注意: このフォームは現在ダミーです。入力しても保存されません ★★★ #}
-            <form method="post" action="#"> {# 送信先は未定 #}
+            <h2>AI APIキー設定</h2>
+
+            {# APIキーが設定されているかの表示 (app.pyから渡される変数を使用) #}
+            {% if api_key_is_set %}
+                <p class="api-status-message api-status-ok">✔️ Google Gemini APIキーは現在有効です。(環境変数 <code>GOOGLE_API_KEY</code> より)</p>
+            {% else %}
+                <p class="api-status-message api-status-warning">⚠️ Google Gemini APIキーが設定されていないか、正しく読み込めていません。AI機能を利用するには、アプリケーションを起動する環境で <code>GOOGLE_API_KEY</code> 環境変数を設定してください。</p>
+            {% endif %}
+
+            {# APIキー入力フォーム (現在はダミー) #}
+            {# ▼▼▼ 修正箇所: action属性の値を空に変更 ▼▼▼ #}
+            <form method="post" action="">
+            {# ▲▲▲ 修正箇所 ▲▲▲ #}
                 <div class="form-group">
-                    <label for="gemini_api_key">Google Gemini API キー</label>
-                    <input type="text" id="gemini_api_key" name="gemini_api_key" placeholder="Gemini API キーを入力 (未実装)" disabled>
-                    <p class="api-key-note">AIによる課題読み取りやタスク推奨機能を使用する場合に必要になります。（現在、この設定は保存されません）</p>
+                    <label for="gemini_api_key">Google Gemini API キー (現在は表示・保存機能は無効)</label>
+                    {# セキュリティのため type="password" を使用し、valueは表示しない #}
+                    <input type="password" id="gemini_api_key" name="gemini_api_key" placeholder="環境変数で設定してください" disabled>
+                    <p class="api-key-note">
+                        AIによる課題推奨機能を使用するには、このアプリケーションを実行している環境で <code>GOOGLE_API_KEY</code> という名前の環境変数に、ご自身のGoogle Gemini APIキーを設定する必要があります。<br>
+                        このフォームからのAPIキーの保存機能は、セキュリティ上の理由から現在提供していません。
+                    </p>
                 </div>
                 {# 他のAI APIキー（例: OpenAI）が必要な場合はここに追加 #}
-                {#
-                <div class="form-group">
-                    <label for="openai_api_key">OpenAI API キー</label>
-                    <input type="text" id="openai_api_key" name="openai_api_key" placeholder="OpenAI API キーを入力 (未実装)" disabled>
-                </div>
-                #}
-                <button type="submit" disabled>APIキーを保存 (未実装)</button>
+                <button type="submit" disabled>APIキーを保存 (現在無効)</button>
             </form>
         </div>
 
