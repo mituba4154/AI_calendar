@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>課題一覧 - スクールタスクプランナー</title>
+    <!-- 必要であればここにCSSのリンクなどを追加 -->
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .actions a { margin-right: 5px; }
+        .no-tasks { color: #777; }
+        .header { display: flex; justify-content: space-between; align-items: center; }
+        .header a { text-decoration: none; padding: 5px 10px; background-color: #007bff; color: white; border-radius: 3px; margin-left: 10px;}
+        .header a.logout { background-color: #dc3545; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>課題一覧</h1>
+        <div>
+            <span>ようこそ、{{ session.get('user_email', 'ゲスト') }} さん</span>
+            <a href="{{ url_for('new_task') }}">新しい課題を追加</a>
+            <a href="{{ url_for('logout') }}" class="logout">ログアウト</a>
+        </div>
+    </div>
+
+    {% if tasks %}
+        <table>
+            <thead>
+                <tr>
+                    <th>課題名</th>
+                    <th>科目</th>
+                    <th>締切日</th>
+                    <th>重要度</th>
+                    <th>ステータス</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td>{{ task.title }}</td>
+                    <td>{{ task.subject if task.subject else '-' }}</td>
+                    <td>{{ task.due_date.strftime('%Y-%m-%d %H:%M') if task.due_date else '未設定' }}</td>
+                    <td>{{ task.priority }}</td>
+                    <td>{{ task.status }}</td>
+                    <td class="actions">
+                        <a href="{{ url_for('edit_task', task_id=task.id) }}">編集</a>
+                        <form action="{{ url_for('delete_task', task_id=task.id) }}" method="post" style="display:inline;">
+                            <button type="submit" onclick="return confirm('本当に削除しますか？');">削除</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="no-tasks">登録されている課題はありません。</p>
+    {% endif %}
+
+</body>
+</html>
