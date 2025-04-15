@@ -1,1 +1,33 @@
-<!DOCTYPE html>\n<html>\n<head>\n    <title>Log In</title>\n</head>\n<body>\n    <h2>Log In</h2>\n    <form method="POST">\n        <input type="email" name="email" placeholder="Email" required><br>\n        <input type="password" name="password" placeholder="Password" required><br>\n        <button type="submit">Log In</button>\n    </form>\n    <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign Up</a></p>\n    {% if error %}\n        <p style="color:red;">{{ error }}</p>\n    {% endif %}\n</body>\n</html>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In</title>
+    <!-- CSSファイルを読み込み (staticフォルダにあると仮定) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="form-container">
+        <h2>Log In</h2>
+
+        {% if error %}
+            <p class="error-message">{{ error }}</p>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('login') }}">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="your@email.com" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Password" required>
+            </div>
+            <button type="submit" class="btn">Log In</button>
+        </form>
+
+        
+    </div>
+</body>
+</html>

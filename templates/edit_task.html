@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>課題を編集 - スクールタスクプランナー</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+     {# new_task.html と同じスタイルを使用 #}
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        h1 { margin-bottom: 20px; }
+        .form-container { max-width: 600px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"], input[type="number"], input[type="datetime-local"], select, textarea {
+            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 1em;
+        }
+        textarea { min-height: 80px; }
+        button { padding: 12px 20px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1em; } /* 更新ボタンの色を変更 */
+        button:hover { background-color: #0056b3; }
+        .back-link { display: inline-block; margin-top: 20px; text-decoration: none; color: #007bff; }
+        .flash-messages { list-style: none; padding: 0; margin-bottom: 15px; }
+        .flash-messages li { padding: 10px 15px; margin-bottom: 10px; border-radius: 4px; }
+        .flash-messages .danger { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+    <h1>課題を編集</h1>
+
+    {# Flashメッセージの表示 (エラー時など) #}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flash-messages">
+        {% for category, message in messages %}
+          {% if category == 'danger' or category == 'warning' %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endif %}
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <div class="form-container">
+        {# フォームの送信先は現在のURL (/tasks/<task_id>/edit) にPOST #}
+        <form method="post">
+            <div class="form-group">
+                <label for="title">課題名 (必須)</label>
+                {# taskオブジェクトの値で初期化 #}
+                <input type="text" id="title" name="title" value="{{ task.title }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="subject_name">教科</label>
+                <select id="subject_name" name="subject_name">
+                    <option value="">-- 教科を選択 --</option>
+                    {# ユーザーの教科リストで選択肢を生成 #}
+                    {% for subject in subjects %}
+                        {# 現在のタスクの教科名と一致すればselected属性を付与 #}
+                        <option value="{{ subject.name }}" {% if subject.name == task.subject_name %}selected{% endif %}>
+                            {{ subject.name }}
+                        </option>
+                    {% endfor %}
+                     <option value="その他" {% if task.subject_name and task.subject_name not in subjects|map(attribute='name') %}selected{% endif %}>その他</option> {# 保存された教科がリストにない場合 #}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="period">時間目 (1-8)</label>
+                {# taskオブジェクトの値で初期化 (Noneの場合は空) #}
+                <input type="number" id="period" name="period" min="1" max="8" value="{{ task.period or '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="due_date">締切日時</label>
+                {# task.due_dateを YYYY-MM-DDTHH:MM 形式に変換して初期化 #}
+                <input type="datetime-local" id="due_date" name="due_date" value="{{ task.due_date.strftime('%Y-%m-%dT%H:%M') if task.due_date else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="priority">優先度</label>
+                <select id="priority" name="priority">
+                    {# task.priority の値に基づいてselected属性を付与 #}
+                    <option value="高" {% if task.priority == '高' %}selected{% endif %}>高</option>
+                    <option value="中" {% if task.priority == '中' %}selected{% endif %}>中</option>
+                    <option value="低" {% if task.priority == '低' %}selected{% endif %}>低</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="status">ステータス (必須)</label>
+                <select id="status" name="status" required>
+                    {# task.status の値に基づいてselected属性を付与 #}
+                    <option value="未着手" {% if task.status == '未着手' %}selected{% endif %}>未着手</option>
+                    <option value="進行中" {% if task.status == '進行中' %}selected{% endif %}>進行中</option>
+                    <option value="完了" {% if task.status == '完了' %}selected{% endif %}>完了</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="estimated_time">想定所要時間 (分)</label>
+                {# task.estimated_time の値で初期化 (Noneの場合は空) #}
+                <input type="number" id="estimated_time" name="estimated_time" min="0" value="{{ task.estimated_time or '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="details">詳細・メモ</label>
+                {# task.details の値で初期化 (Noneの場合は空) #}
+                <textarea id="details" name="details" rows="4">{{ task.details or '' }}</textarea>
+            </div>
+
+            <button type="submit">更新する</button> {# ボタンテキストを変更 #}
+        </form>
+    </div>
+
+    <a href="{{ url_for('tasks') }}" class="back-link">課題一覧に戻る</a>
+
+</body>
+</html>

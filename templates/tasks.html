@@ -4,38 +4,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>課題一覧 - スクールタスクプランナー</title>
-    <!-- 必要であればここにCSSのリンクなどを追加 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> {# CSSファイルへのリンク #}
     <style>
+        /* 簡単なテーブルスタイル（style.cssで定義推奨） */
         body { font-family: sans-serif; margin: 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .header h1 { margin: 0; }
+        .header .user-info span { margin-right: 15px; }
+        /* アクションリンクのスタイル */
+        .header .actions a { text-decoration: none; padding: 8px 12px; color: white; border-radius: 4px; margin-left: 10px; font-size: 0.9em;}
+        /* 各リンクの背景色 */
+        .header .actions a.dashboard { background-color: #ffc107; color: #212529; } /* 例: 黄色 */
+        .header .actions a.calendar { background-color: #28a745; } /* 例: 緑色 */
+        .header .actions a.settings { background-color: #17a2b8; } /* 例: 青緑色 */
+        .header .actions a.manage-subjects { background-color: #6c757d; } /* 例: グレー */
+        .header .actions a.new-task { background-color: #007bff; } /* 例: 青色 */
+        .header .actions a.logout { background-color: #dc3545; } /* 例: 赤色 */
+
+        .flash-messages { list-style: none; padding: 0; margin-bottom: 15px; }
+        .flash-messages li { padding: 10px 15px; margin-bottom: 10px; border-radius: 4px; }
+        .flash-messages .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .flash-messages .danger { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .flash-messages .warning { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+        .flash-messages .info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-        .actions a { margin-right: 5px; }
-        .no-tasks { color: #777; }
-        .header { display: flex; justify-content: space-between; align-items: center; }
-        .header a { text-decoration: none; padding: 5px 10px; background-color: #007bff; color: white; border-radius: 3px; margin-left: 10px;}
-        .header a.logout { background-color: #dc3545; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; font-size: 0.9em; }
+        th { background-color: #f8f9fa; }
+        td.actions form { display: inline; margin-left: 5px;}
+        td.actions a, td.actions button { font-size: 0.9em; padding: 4px 8px; text-decoration: none; border-radius: 3px; cursor: pointer;}
+        td.actions a { background-color: #ffc107; color: #212529; border: 1px solid #ffc107;} /* 編集ボタン */
+        td.actions button { background-color: #dc3545; color: white; border: 1px solid #dc3545;} /* 削除ボタン */
+        .no-tasks { color: #6c757d; margin-top: 20px; }
     </style>
 </head>
 <body>
 
     <div class="header">
         <h1>課題一覧</h1>
-        <div>
-            <span>ようこそ、{{ session.get('user_email', 'ゲスト') }} さん</span>
-            <a href="{{ url_for('new_task') }}">新しい課題を追加</a>
+        <div class="actions">
+             <span class="user-info">ようこそ、{{ session.get('user_email', 'ゲスト') }} さん</span>
+            {# === ここにダッシュボードへのリンクを追加 === #}
+            <a href="{{ url_for('dashboard') }}" class="dashboard">ダッシュボード</a>
+            {# ========================================== #}
+            <a href="{{ url_for('calendar') }}" class="calendar">カレンダー</a>
+            <a href="{{ url_for('settings') }}" class="settings">設定</a> {# 設定ページへのリンク #}
+            <a href="{{ url_for('subjects') }}" class="manage-subjects">教科管理</a>
+            <a href="{{ url_for('new_task') }}" class="new-task">新しい課題を追加</a>
             <a href="{{ url_for('logout') }}" class="logout">ログアウト</a>
         </div>
     </div>
+
+    {# Flashメッセージの表示 #}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flash-messages">
+        {% for category, message in messages %}
+          <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
 
     {% if tasks %}
         <table>
             <thead>
                 <tr>
                     <th>課題名</th>
-                    <th>科目</th>
+                    <th>教科</th>
+                    <th>時間目</th>
                     <th>締切日</th>
-                    <th>重要度</th>
+                    <th>優先度</th>
                     <th>ステータス</th>
                     <th>操作</th>
                 </tr>
@@ -44,14 +83,15 @@
                 {% for task in tasks %}
                 <tr>
                     <td>{{ task.title }}</td>
-                    <td>{{ task.subject if task.subject else '-' }}</td>
+                    <td>{{ task.subject_name if task.subject_name else '-' }}</td>
+                    <td>{{ task.period if task.period else '-' }}</td>
                     <td>{{ task.due_date.strftime('%Y-%m-%d %H:%M') if task.due_date else '未設定' }}</td>
                     <td>{{ task.priority }}</td>
                     <td>{{ task.status }}</td>
                     <td class="actions">
                         <a href="{{ url_for('edit_task', task_id=task.id) }}">編集</a>
-                        <form action="{{ url_for('delete_task', task_id=task.id) }}" method="post" style="display:inline;">
-                            <button type="submit" onclick="return confirm('本当に削除しますか？');">削除</button>
+                        <form action="{{ url_for('delete_task', task_id=task.id) }}" method="post">
+                            <button type="submit" onclick="return confirm('課題「{{ task.title }}」を本当に削除しますか？');">削除</button>
                         </form>
                     </td>
                 </tr>
@@ -59,7 +99,7 @@
             </tbody>
         </table>
     {% else %}
-        <p class="no-tasks">登録されている課題はありません。</p>
+        <p class="no-tasks">登録されている課題はありません。まずは「新しい課題を追加」から課題を登録しましょう。</p>
     {% endif %}
 
 </body>

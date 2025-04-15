@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カレンダー - スクールタスクプランナー</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> {# 共通CSS #}
+    {# ▼▼▼ FullCalendar の CSS を読み込み (CDN) ▼▼▼ #}
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' rel='stylesheet'> {# アイコン用 (任意) #}
+    <link href='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.14/main.min.css' rel='stylesheet' />
+    <link href='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.14/main.min.css' rel='stylesheet' />
+    <link href='https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.14/main.min.css' rel='stylesheet' />
+    <link href='https://cdn.jsdelivr.net/npm/@fullcalendar/list@6.1.14/main.min.css' rel='stylesheet' />
+    {# ▲▲▲ FullCalendar の CSS ▲▲▲ #}
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        .container { max-width: 1100px; margin: 0 auto; } /* カレンダー用に少し広め */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .header h1 { margin: 0; }
+        .header .actions a { text-decoration: none; padding: 8px 12px; background-color: #6c757d; color: white; border-radius: 4px; font-size: 0.9em; margin-left: 10px;}
+        /* 必要に応じて他のスタイルを追加 */
+        #calendar {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        /* イベントの色を反映させるためのCSS（任意） */
+        .fc-event { border: none !important; } /* デフォルトのボーダーを消す */
+        /* ツールチップ用のスタイル（任意）*/
+        .fc-event-main { cursor: pointer; } /* クリックできることを示す */
+        .tooltip { /* Tippy.jsなどのライブラリを使うと楽 */
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            white-space: pre-wrap; /* メモの改行を反映 */
+            z-index: 100;
+            pointer-events: none; /* ツールチップ自体がマウスイベントを邪魔しないように */
+            display: none; /* 初期状態は非表示 */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>カレンダー</h1>
+            <div class="actions">
+                 {# ナビゲーションリンク #}
+                 <a href="{{ url_for('tasks') }}">課題一覧</a>
+                 <a href="{{ url_for('subjects') }}">教科管理</a>
+                 <a href="{{ url_for('settings') }}">設定</a>
+                 <a href="{{ url_for('logout') }}">ログアウト</a>
+            </div>
+        </div>
+
+        {# Flashメッセージ表示エリア #}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <ul class="flash-messages">
+            {% for category, message in messages %}
+              <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+
+        {# ▼▼▼ カレンダーを描画するコンテナ ▼▼▼ #}
+        <div id='calendar'></div>
+        {# ▲▲▲ カレンダーを描画するコンテナ ▲▲▲ #}
+
+        {# ツールチップ表示用の要素 (任意) #}
+        <div id="event-tooltip" class="tooltip"></div>
+
+    </div>{# end .container #}
+
+    {# ▼▼▼ FullCalendar の JavaScript を読み込み (CDN) ▼▼▼ #}
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.14/index.global.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.14/index.global.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.14/index.global.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/list@6.1.14/index.global.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@6.1.14/index.global.min.js'></script> {# クリックなどのインタラクション用 #}
+    {# 日本語化ファイル #}
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.14/locales/ja.global.min.js'></script>
+    {# ▲▲▲ FullCalendar の JavaScript ▲▲▲ #}
+
+    {# ▼▼▼ FullCalendar の初期化と設定を行うスクリプト ▼▼▼ #}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var tooltipEl = document.getElementById('event-tooltip'); // ツールチップ要素
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                // --- 基本設定 ---
+                initialView: 'dayGridMonth', // 初期表示ビュー (月表示)
+                headerToolbar: { // ヘッダーのボタン設定
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek' // ビュー切り替えボタン
+                },
+                locale: 'ja', // 日本語化
+                buttonIcons: false, // Bootstrapアイコン等を使わない場合はfalse
+                navLinks: true, // 日付や週番号をクリック可能にする
+                editable: false, // イベントのドラッグ＆ドロップは無効 (編集は別ページで行うため)
+                dayMaxEvents: true, // 1日に表示できるイベント数に制限を設け、「+ আরও」リンクを表示
+
+                // --- イベントデータの取得 ---
+                events: '/api/events', // ★★★ イベントデータを取得するAPIエンドポイントを指定 ★★★
+                eventTimeFormat: { // イベント時刻の表示形式 (例: 14:30)
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    omitZeroMinute: false, // 00分を省略しない
+                    meridiem: false // AM/PMを表示しない
+                },
+
+                // --- イベントの見た目 ---
+                eventDidMount: function(info) {
+                    // イベントの色を適用 (APIから 'color' プロパティが渡されている場合)
+                    if (info.event.backgroundColor) {
+                         info.el.style.backgroundColor = info.event.backgroundColor;
+                         // 必要であれば文字色も調整
+                         // info.el.style.color = 'white';
+                    }
+
+                    // ★★★ ツールチップ表示 (マウスオーバー) ★★★ (簡易版)
+                    info.el.addEventListener('mouseenter', function(e) {
+                        if (info.event.extendedProps.description) {
+                             tooltipEl.innerHTML = info.event.extendedProps.description;
+                             tooltipEl.style.display = 'block';
+                             // マウスカーソルの近くに表示
+                             tooltipEl.style.left = e.pageX + 10 + 'px';
+                             tooltipEl.style.top = e.pageY + 10 + 'px';
+                        }
+                    });
+                    info.el.addEventListener('mouseleave', function() {
+                         tooltipEl.style.display = 'none';
+                    });
+                     info.el.addEventListener('mousemove', function(e) {
+                         // マウス移動に追従
+                         tooltipEl.style.left = e.pageX + 10 + 'px';
+                         tooltipEl.style.top = e.pageY + 10 + 'px';
+                    });
+                },
+
+                // --- イベントクリック時の動作 ---
+                eventClick: function(info) {
+                    info.jsEvent.preventDefault(); // デフォルトの動作（もしあれば）をキャンセル
+
+                    // イベント（タスク）のIDを取得
+                    var taskId = info.event.id;
+
+                    if (taskId) {
+                        // ★★★ ここで編集ページに遷移するなどのアクションを実装 ★★★
+                        // 例1: 編集ページに遷移
+                        window.location.href = '/tasks/' + taskId + '/edit';
+
+                        // 例2: モーダルウィンドウで詳細を表示する (別途ライブラリや実装が必要)
+                        // alert('タスクID: ' + taskId + '\nタイトル: ' + info.event.title + '\n詳細: ' + info.event.extendedProps.description);
+                    }
+                },
+
+                // --- 日付クリック時の動作 (任意) ---
+                // dateClick: function(info) {
+                //     // クリックした日付のタスク登録ページに遷移するなど
+                //     // alert('Clicked on: ' + info.dateStr);
+                //     // window.location.href = '/tasks/new?date=' + info.dateStr; // GETパラメータで日付を渡すなど
+                // }
+
+            }); // end new FullCalendar.Calendar
+
+            // カレンダーを描画
+            calendar.render();
+
+        }); // end DOMContentLoaded
+    </script>
+    {# ▲▲▲ FullCalendar の初期化と設定を行うスクリプト ▲▲▲ #}
+
+</body>
+</html>

@@ -1,0 +1,330 @@
+/* static/style.css */
+
+/* --- 基本的なリセットとbodyのスタイル --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    line-height: 1.6; /* 行間を追加 */
+    padding: 20px; /* 全体に最低限のパディング */
+}
+
+/* --- 認証ページ (Login/Signup) 用の body スタイル --- */
+/* HTML側で <body class="auth-page-body"> のように指定 */
+body.auth-page-body {
+    display: flex;
+    flex-direction: column; /* Flashメッセージとフォームを縦に */
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* --- コンテナ (一般的なページ用、タスク一覧などで使用) --- */
+.container {
+    max-width: 1100px; /* コンテンツの最大幅を少し広げる */
+    margin: 0 auto; /* 中央揃え */
+    background-color: #fff;
+    padding: 25px 40px; /* 内側余白を調整 */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* --- Flashメッセージ (全ページ共通) --- */
+.flash-messages {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto 20px auto; /* 中央揃え、下にマージン */
+    width: 100%;
+    max-width: 960px; /* メッセージの最大幅 */
+}
+/* 認証ページではフォーム幅に合わせる */
+.auth-page-body .flash-messages {
+     max-width: 400px;
+}
+/* コンテナ内ではコンテナ幅に */
+.container .flash-messages {
+    max-width: 100%;
+}
+
+.flash-messages li {
+    padding: 12px 20px; /* 少しパディングを増やす */
+    margin-bottom: 10px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 0.95em;
+}
+.flash-messages li:last-child {
+    margin-bottom: 0;
+}
+.flash-messages li.info { color: #0c5460; background-color: #d1ecf1; border-color: #bee5eb; }
+.flash-messages li.success { color: #155724; background-color: #d4edda; border-color: #c3e6cb; }
+.flash-messages li.warning { color: #856404; background-color: #fff3cd; border-color: #ffeeba; }
+.flash-messages li.danger { color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; }
+
+/* --- 認証フォームコンテナ (Login/Signup) --- */
+/* signup.html, login.html の <div class="auth-form-container"> に適用 */
+.auth-form-container {
+    background-color: #ffffff;
+    padding: 30px 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px; /* フォームの最大幅 */
+    text-align: center;
+}
+.auth-form-container h2 {
+    margin-bottom: 25px;
+    color: #555;
+    font-weight: 600;
+}
+.auth-form-container .form-group { margin-bottom: 20px; text-align: left; }
+.auth-form-container label { display: block; margin-bottom: 8px; font-weight: bold; color: #666; font-size: 0.9em; }
+.auth-form-container input[type="email"],
+.auth-form-container input[type="password"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    transition: border-color 0.3s ease;
+}
+.auth-form-container input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+}
+.auth-form-container .btn { margin-top: 15px; } /* ボタン上のマージン調整 */
+
+/* --- 汎用フォーム要素 (タスク登録/編集などで使用) --- */
+.form-container-large { /* タスク登録/編集用コンテナ */
+    background-color: #ffffff;
+    padding: 30px 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 700px; /* 登録/編集フォームの最大幅 */
+    margin: 20px auto; /* 上下マージンと中央揃え */
+}
+.form-container-large h1 {
+    margin-bottom: 30px; /* 見出し下のマージン */
+    color: #555;
+    font-weight: 600;
+    text-align: center;
+    font-size: 1.8em;
+}
+.form-container-large .form-group {
+    margin-bottom: 18px; /* フォームグループ間のマージン */
+    text-align: left;
+}
+.form-container-large label {
+    display: block;
+    margin-bottom: 6px; /* ラベル下のマージン */
+    font-weight: bold;
+    color: #666;
+    font-size: 0.9em;
+}
+/* テキスト入力、数値、日時、選択、テキストエリア */
+input[type="text"],
+input[type="number"],
+input[type="datetime-local"],
+select,
+textarea {
+    display: block; /* block要素に */
+    width: 100%;
+    padding: 10px 12px; /* パディング調整 */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    transition: border-color 0.3s ease;
+    background-color: #fff;
+    color: #333;
+}
+textarea {
+    min-height: 100px; /* 高さを少し調整 */
+    resize: vertical;
+}
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+}
+/* 教科選択肢の下のヘルプテキスト */
+.form-container-large .form-group small {
+    font-size: 0.8em;
+    color: #6c757d;
+    margin-top: 5px;
+    display: inline-block;
+}
+/* 送信ボタンエリア */
+.form-container-large .submit-button-group {
+    text-align: center;
+    margin-top: 30px;
+}
+
+/* --- ボタン --- */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    text-decoration: none;
+    text-align: center;
+    margin: 5px; /* ボタン間の基本マージン */
+    line-height: 1.5; /* ボタン内のテキスト行間 */
+    vertical-align: middle; /* 他の要素と縦方向を揃える */
+}
+.btn-primary { background-color: #007bff; border: 1px solid #007bff;}
+.btn-primary:hover { background-color: #0056b3; border-color: #0056b3;}
+
+.btn-secondary { background-color: #6c757d; border: 1px solid #6c757d;}
+.btn-secondary:hover { background-color: #5a6268; border-color: #5a6268;}
+
+.btn-success { background-color: #28a745; border: 1px solid #28a745;}
+.btn-success:hover { background-color: #218838; border-color: #218838;}
+
+.btn-danger { background-color: #dc3545; border: 1px solid #dc3545;}
+.btn-danger:hover { background-color: #c82333; border-color: #c82333;}
+
+.btn-warning { background-color: #ffc107; color: #212529; border: 1px solid #ffc107;}
+.btn-warning:hover { background-color: #e0a800; border-color: #e0a800;}
+
+.btn-info { background-color: #17a2b8; border: 1px solid #17a2b8;}
+.btn-info:hover { background-color: #138496; border-color: #138496;}
+
+.btn-block { /* 幅100%ボタン */
+    width: 100%;
+    display: block;
+}
+/* フォーム内の送信ボタン */
+.form-container-large .submit-button-group .btn {
+    padding: 12px 30px; /* 少し大きめに */
+    font-size: 1.1em;
+}
+
+/* --- 認証フォーム切り替えリンク --- */
+.switch-link {
+    margin-top: 25px;
+    font-size: 0.9em;
+    color: #555;
+}
+.switch-link a { color: #007bff; text-decoration: none; font-weight: bold; }
+.switch-link a:hover { text-decoration: underline; }
+
+/* --- tasks.html 専用スタイル --- */
+.tasks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px; /* 下マージン増加 */
+    padding-bottom: 15px; /* 下パディング増加 */
+    border-bottom: 1px solid #dee2e6; /* ボーダー少し濃く */
+    flex-wrap: wrap;
+    gap: 15px; /* 要素間の隙間 */
+}
+.tasks-header h1 {
+    margin: 0;
+    font-size: 2em; /* 見出しサイズ */
+    color: #343a40;
+    flex-grow: 1; /* スペースがあれば伸びる */
+}
+.tasks-header .user-info {
+    color: #495057;
+    font-size: 0.95em;
+    white-space: nowrap; /* 折り返さない */
+}
+.tasks-header .actions {
+    display: flex;
+    flex-wrap: wrap; /* ボタンが多い場合に折り返す */
+    gap: 10px; /* ボタン間の隙間 */
+    justify-content: flex-end; /* 右寄せ */
+}
+/* tasks.html テーブル */
+.tasks-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 0.9em;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    background-color: #fff; /* テーブル背景色 */
+}
+.tasks-table th,
+.tasks-table td {
+    border: 1px solid #e9ecef; /* 罫線をさらに薄く */
+    padding: 12px 15px;
+    text-align: left;
+    vertical-align: middle;
+}
+.tasks-table th {
+    background-color: #f8f9fa;
+    font-weight: 600; /* 少し太く */
+    color: #495057;
+    white-space: nowrap; /* ヘッダーは折り返さない */
+}
+.tasks-table tbody tr:nth-child(even) { background-color: #fdfdfe; } /* 交互色少し変更 */
+.tasks-table tbody tr:hover { background-color: #f1f3f5; } /* ホバー色変更 */
+.tasks-table .actions {
+    text-align: center;
+    white-space: nowrap;
+}
+.tasks-table .actions form {
+    display: inline-block;
+    margin: 0 3px;
+}
+/* tasks.html テーブル内のボタンサイズ */
+.tasks-table .actions .btn {
+    padding: 5px 10px;
+    font-size: 0.85em;
+}
+.no-tasks {
+    color: #6c757d;
+    margin-top: 20px;
+    text-align: center;
+    padding: 30px; /* パディング増加 */
+    background-color: #e9ecef;
+    border-radius: 4px;
+    font-size: 1.1em;
+}
+
+/* --- 戻るリンク (タスク登録/編集ページで使用) --- */
+.back-link {
+    display: block;
+    text-align: center;
+    margin: 30px auto; /* 上下マージンと中央揃え */
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+    font-size: 1em;
+}
+.back-link:hover { text-decoration: underline; }
+
+/* --- レスポンシブ対応 (簡易例) --- */
+@media (max-width: 768px) {
+    body { padding: 10px; }
+    .container { padding: 20px; }
+    .tasks-header { flex-direction: column; align-items: flex-start; }
+    .tasks-header h1 { margin-bottom: 15px; }
+    .tasks-header .user-info { margin-bottom: 10px; }
+    .tasks-header .actions { width: 100%; justify-content: flex-start; } /* 左寄せ */
+    .tasks-table th, .tasks-table td { padding: 8px 10px; }
+    .tasks-table .actions .btn { padding: 4px 8px; font-size: 0.8em; }
+    .form-container-large { padding: 20px; }
+    .form-container-large h1 { font-size: 1.5em; }
+    .auth-form-container { padding: 20px; }
+}
