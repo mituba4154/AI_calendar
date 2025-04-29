@@ -4,5 +4,6 @@ instance/
 __pycache__/
 *.pyc
 database.db
+instance/ 
 server.log
 # 他の無視したいファイル...
