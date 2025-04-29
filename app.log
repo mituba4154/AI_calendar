@@ -1,0 +1,33 @@
+他に完全体でないファイル
+routes.py: 元のapp.pyのすべてのルートハンドラが含まれていません。下記のルートが追加で必要です：
+
+subjects
+
+subjects/int:subject_id/delete
+
+tasks
+
+tasks/new
+
+tasks/int:task_id/edit
+
+tasks/int:task_id/delete
+
+calendar
+
+api/events
+
+settings
+
+settings/change_password
+
+config.py: デバッグ設定が正しく移行されていません。下記の設定を追加する必要があります：
+
+python
+DEBUG_SKIP_LOGIN_CHECK = False
+DEBUG_SKIP_LOGIN_EMAIL = "debug@example.com"
+utils.py: 元のapp.pyのログイン要求デコレータなどが正しく移行されているか確認してください。
+
+app.py: この新しいルートファイルが適切なインポートと構成になっているか確認し、テストサーバー起動時にデバッグモードが正しく設定されるか確認する必要があります。
+
+CLIコマンド: create-userコマンドが移行されていない可能性があります。これは別のモジュール（例：cli.py）に移すことも検討すべきです。
