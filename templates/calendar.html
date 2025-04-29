@@ -39,7 +39,6 @@
             pointer-events: none; /* ツールチップ自体がマウスイベントを邪魔しないように */
             display: none; /* 初期状態は非表示 */
         }
-
     </style>
 </head>
 <body>
@@ -48,10 +47,10 @@
             <h1>カレンダー</h1>
             <div class="actions">
                  {# ナビゲーションリンク #}
-                 <a href="{{ url_for('tasks') }}">課題一覧</a>
-                 <a href="{{ url_for('subjects') }}">教科管理</a>
-                 <a href="{{ url_for('settings') }}">設定</a>
-                 <a href="{{ url_for('logout') }}">ログアウト</a>
+                 <a href="{{ url_for('routes.tasks') }}">課題一覧</a>
+                 <a href="{{ url_for('routes.subjects') }}">教科管理</a>
+                 <a href="{{ url_for('routes.settings') }}">設定</a>
+                 <a href="{{ url_for('routes.logout') }}">ログアウト</a>
             </div>
         </div>
 

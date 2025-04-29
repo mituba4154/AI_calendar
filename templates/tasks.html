@@ -44,13 +44,13 @@
         <div class="actions">
              <span class="user-info">ようこそ、{{ session.get('user_email', 'ゲスト') }} さん</span>
             {# === ここにダッシュボードへのリンクを追加 === #}
-            <a href="{{ url_for('dashboard') }}" class="dashboard">ダッシュボード</a>
+            <a href="{{ url_for('routes.dashboard') }}" class="dashboard">ダッシュボード</a>
             {# ========================================== #}
-            <a href="{{ url_for('calendar') }}" class="calendar">カレンダー</a>
-            <a href="{{ url_for('settings') }}" class="settings">設定</a> {# 設定ページへのリンク #}
-            <a href="{{ url_for('subjects') }}" class="manage-subjects">教科管理</a>
-            <a href="{{ url_for('new_task') }}" class="new-task">新しい課題を追加</a>
-            <a href="{{ url_for('logout') }}" class="logout">ログアウト</a>
+            <a href="{{ url_for('routes.calendar') }}" class="calendar">カレンダー</a>
+            <a href="{{ url_for('routes.settings') }}" class="settings">設定</a> {# 設定ページへのリンク #}
+            <a href="{{ url_for('routes.subjects') }}" class="manage-subjects">教科管理</a>
+            <a href="{{ url_for('routes.new_task') }}" class="new-task">新しい課題を追加</a>
+            <a href="{{ url_for('routes.logout') }}" class="logout">ログアウト</a>
         </div>
     </div>
 
@@ -89,8 +89,8 @@
                     <td>{{ task.priority }}</td>
                     <td>{{ task.status }}</td>
                     <td class="actions">
-                        <a href="{{ url_for('edit_task', task_id=task.id) }}">編集</a>
-                        <form action="{{ url_for('delete_task', task_id=task.id) }}" method="post">
+                        <a href="{{ url_for('routes.edit_task', task_id=task.id) }}">編集</a>
+                        <form action="{{ url_for('routes.delete_task', task_id=task.id) }}" method="post">
                             <button type="submit" onclick="return confirm('課題「{{ task.title }}」を本当に削除しますか？');">削除</button>
                         </form>
                     </td>

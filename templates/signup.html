@@ -30,7 +30,7 @@
            {% endif %} #}
         {# ↑ Flashメッセージを使う場合、この形式のエラー表示は不要になることが多い #}
 
-        <form method="POST" action="{{ url_for('signup') }}">
+        <form method="POST" action="{{ url_for('routes.signup') }}">
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" placeholder="your@email.com" value="{{ request.form.email or '' }}" required> {# エラー時入力保持 #}
@@ -49,7 +49,7 @@
         </form>
 
         <p class="switch-link">
-            Already have an account? <a href="{{ url_for('login') }}">Log In</a>
+            Already have an account? <a href="{{ url_for('routes.login') }}">Log In</a>
         </p>
     </div>
 </body>

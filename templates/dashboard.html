@@ -43,7 +43,7 @@
             <h1>ダッシュボード</h1>
             <div class="user-info">
                 ようこそ、{{ user_email }} さん
-                (<a href="{{ url_for('logout') }}">ログアウト</a>)
+                (<a href="{{ url_for('routes.logout') }}">ログアウト</a>)
             </div>
         </div>
 
@@ -64,11 +64,11 @@
         <div class="dashboard-section quick-links">
              <h2>クイックアクセス</h2>
              <ul>
-                 <li><a href="{{ url_for('calendar') }}">カレンダー</a></li>
-                 <li><a href="{{ url_for('tasks') }}">課題一覧</a></li>
-                 <li><a href="{{ url_for('new_task') }}">新規課題</a></li>
-                 <li><a href="{{ url_for('subjects') }}">教科管理</a></li>
-                 <li><a href="{{ url_for('settings') }}">設定</a></li>
+                 <li><a href="{{ url_for('routes.calendar') }}">カレンダー</a></li>
+                 <li><a href="{{ url_for('routes.tasks') }}">課題一覧</a></li>
+                 <li><a href="{{ url_for('routes.new_task') }}">新規課題</a></li>
+                 <li><a href="{{ url_for('routes.subjects') }}">教科管理</a></li>
+                 <li><a href="{{ url_for('routes.settings') }}">設定</a></li>
              </ul>
         </div>
 
@@ -82,7 +82,7 @@
                     <ul>
                         {% for task in upcoming_tasks %}
                         <li>
-                            <a href="{{ url_for('edit_task', task_id=task.id) }}">{{ task.title }}</a>
+                            <a href="{{ url_for('routes.edit_task', task_id=task.id) }}">{{ task.title }}</a>
                             <div class="task-meta">
                                 {% if task.subject_name %}教科: {{ task.subject_name }} | {% endif %}
                                 締切: {{ task.due_date.strftime('%m/%d %H:%M') }}
@@ -121,7 +121,7 @@
                 {% else %}
                     {# APIキーが設定されていない場合 #}
                     <p class="api-notice">
-                        AIによる推奨機能を利用するには、<a href="{{ url_for('settings') }}">設定ページ</a>でAPIキーを登録してください。(現在この機能は準備中です)
+                        AIによる推奨機能を利用するには、<a href="{{ url_for('routes.settings') }}">設定ページ</a>でAPIキーを登録してください。(現在この機能は準備中です)
                     </p>
                 {% endif %}
             </div>

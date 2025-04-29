@@ -47,8 +47,8 @@
             <h1>教科管理</h1>
             <div class="actions">
                 {# === ここにダッシュボードへのリンクを追加 === #}
-                <a href="{{ url_for('dashboard') }}" class="dashboard">ダッシュボード</a>
-                <a href="{{ url_for('tasks') }}" class="back-to-tasks">課題一覧に戻る</a> {# 課題一覧ページへのリンク #}
+                <a href="{{ url_for('routes.dashboard') }}" class="dashboard">ダッシュボード</a>
+                <a href="{{ url_for('routes.tasks') }}" class="back-to-tasks">課題一覧に戻る</a> {# 課題一覧ページへのリンク #}
             </div>
         </div>
 
@@ -66,7 +66,7 @@
         {# 教科登録フォーム #}
         <div class="subject-registration">
             <h2>新しい教科を登録</h2>
-            <form method="post" action="{{ url_for('subjects') }}" class="form-inline">
+            <form method="post" action="{{ url_for('routes.subjects') }}" class="form-inline">
                 <input type="text" name="subject_name" placeholder="教科名を入力 (例: 数学I)" required>
                 <button type="submit">登録</button>
             </form>
@@ -81,7 +81,7 @@
                         <li>
                             <span>{{ subject.name }}</span>
                             {# 削除ボタン (各教科ごとにフォームを作成) #}
-                            <form action="{{ url_for('delete_subject', subject_id=subject.id) }}" method="post">
+                            <form action="{{ url_for('routes.delete_subject', subject_id=subject.id) }}" method="post">
                                 <button type="submit" onclick="return confirm('教科「{{ subject.name }}」を削除しますか？この教科を使っている課題から教科名が消えることはありません。');">削除</button>
                             </form>
                         </li>

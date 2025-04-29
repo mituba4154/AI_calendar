@@ -61,11 +61,11 @@
             <h1>設定</h1>
             <div class="actions">
                 {# === ダッシュボードへのリンク === #}
-                <a href="{{ url_for('dashboard') }}" class="dashboard">ダッシュボード</a>
+                <a href="{{ url_for('routes.dashboard') }}" class="dashboard">ダッシュボード</a>
                 {# === 課題一覧へのリンク === #}
-                <a href="{{ url_for('tasks') }}">課題一覧</a>
+                <a href="{{ url_for('routes.tasks') }}">課題一覧</a>
                 {# 必要であれば他のリンクも追加 #}
-                {# <a href="{{ url_for('logout') }}">ログアウト</a> #}
+                {# <a href="{{ url_for('routes.logout') }}">ログアウト</a> #}
             </div>
         </div>
 
@@ -83,7 +83,7 @@
         {# --- パスワード変更セクション --- #}
         <div class="settings-section">
             <h2>パスワード変更</h2>
-            <form method="post" action="{{ url_for('change_password') }}">
+            <form method="post" action="{{ url_for('routes.change_password') }}">
                 <div class="form-group">
                     <label for="current_password">現在のパスワード</label>
                     <input type="password" id="current_password" name="current_password" required>
@@ -112,9 +112,7 @@
             {% endif %}
 
             {# APIキー入力フォーム (現在はダミー) #}
-            {# ▼▼▼ 修正箇所: action属性の値を空に変更 ▼▼▼ #}
             <form method="post" action="">
-            {# ▲▲▲ 修正箇所 ▲▲▲ #}
                 <div class="form-group">
                     <label for="gemini_api_key">Google Gemini API キー (現在は表示・保存機能は無効)</label>
                     {# セキュリティのため type="password" を使用し、valueは表示しない #}
