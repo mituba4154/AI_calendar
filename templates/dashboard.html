@@ -12,7 +12,7 @@
             <h1>ダッシュボード</h1>
             <div class="user-info">
                 ようこそ、{{ user_email }} さん
-                (<a href="{{ url_for('routes.logout') }}">ログアウト</a>)
+                <a href="{{ url_for('routes.logout') }}" class="btn btn-danger btn-sm">ログアウト</a>
             </div>
         </div>
 
