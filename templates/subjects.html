@@ -4,55 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>教科管理 - スクールタスクプランナー</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> {# 共通CSS #}
-    <style>
-        /* このページ固有のスタイル（style.cssで定義推奨） */
-        body { font-family: sans-serif; margin: 20px; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
-        .header h1 { margin: 0; }
-        /* アクションリンクのスタイル調整 */
-        .header .actions a { text-decoration: none; padding: 8px 12px; color: white; border-radius: 4px; font-size: 0.9em; margin-left: 10px; /* リンク間のマージンを追加 */ }
-        .header .actions a:first-child { margin-left: 0; } /* 最初のリンクには左マージン不要 */
-        .header .actions a.dashboard { background-color: #ffc107; color: #212529; } /* ダッシュボード用スタイル (例) */
-        .header .actions a.back-to-tasks { background-color: #6c757d; } /* 課題一覧に戻る用スタイル (例) */
-
-        .flash-messages { list-style: none; padding: 0; margin-bottom: 15px; }
-        .flash-messages li { padding: 10px 15px; margin-bottom: 10px; border-radius: 4px; }
-        .flash-messages .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .flash-messages .danger { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        .flash-messages .warning { background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
-
-        .subject-registration { margin-bottom: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 5px; border: 1px solid #dee2e6;}
-        .subject-registration h2 { margin-top: 0; margin-bottom: 15px; font-size: 1.2em; }
-        .subject-registration .form-inline { display: flex; align-items: center; }
-        .subject-registration input[type="text"] { flex-grow: 1; padding: 10px; border: 1px solid #ccc; border-radius: 4px; margin-right: 10px; font-size: 1em; }
-        .subject-registration button { padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1em; }
-        .subject-registration button:hover { background-color: #0056b3; }
-
-        .subject-list h2 { font-size: 1.2em; margin-bottom: 15px; }
-        .subject-list ul { list-style: none; padding: 0; }
-        .subject-list li { display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; border: 1px solid #dee2e6; border-radius: 4px; margin-bottom: 10px; background-color: white; }
-        .subject-list li span { flex-grow: 1; margin-right: 15px; }
-        .subject-list li form { margin: 0; } /* フォームのデフォルトマージンを打ち消し */
-        .subject-list li button { background-color: #dc3545; color: white; border: 1px solid #dc3545; font-size: 0.85em; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
-        .subject-list li button:hover { background-color: #c82333; border-color: #bd2130; }
-        .no-subjects { color: #6c757d; }
-
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>教科管理</h1>
             <div class="actions">
-                {# === ここにダッシュボードへのリンクを追加 === #}
-                <a href="{{ url_for('routes.dashboard') }}" class="dashboard">ダッシュボード</a>
-                <a href="{{ url_for('routes.tasks') }}" class="back-to-tasks">課題一覧に戻る</a> {# 課題一覧ページへのリンク #}
+                <a href="{{ url_for('routes.dashboard') }}" class="btn btn-warning">ダッシュボード</a>
+                <a href="{{ url_for('routes.tasks') }}" class="btn btn-secondary">課題一覧に戻る</a>
             </div>
         </div>
 
-        {# Flashメッセージの表示 #}
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
             <ul class="flash-messages">
@@ -63,7 +26,6 @@
           {% endif %}
         {% endwith %}
 
-        {# 教科登録フォーム #}
         <div class="subject-registration">
             <h2>新しい教科を登録</h2>
             <form method="post" action="{{ url_for('routes.subjects') }}" class="form-inline">
@@ -72,7 +34,6 @@
             </form>
         </div>
 
-        {# 登録済み教科一覧 #}
         <div class="subject-list">
             <h2>登録済み教科一覧</h2>
             {% if subjects %}
@@ -80,7 +41,6 @@
                     {% for subject in subjects %}
                         <li>
                             <span>{{ subject.name }}</span>
-                            {# 削除ボタン (各教科ごとにフォームを作成) #}
                             <form action="{{ url_for('routes.delete_subject', subject_id=subject.id) }}" method="post">
                                 <button type="submit" onclick="return confirm('教科「{{ subject.name }}」を削除しますか？この教科を使っている課題から教科名が消えることはありません。');">削除</button>
                             </form>
@@ -91,7 +51,6 @@
                 <p class="no-subjects">登録されている教科はありません。</p>
             {% endif %}
         </div>
-
-    </div> {# end .container #}
+    </div>
 </body>
 </html>

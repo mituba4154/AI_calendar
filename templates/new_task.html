@@ -5,84 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>新しい課題を追加 - スクールタスクプランナー</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <style>
-        /* 簡単なフォームスタイル（style.cssで定義推奨） */
-        body { font-family: sans-serif; margin: 20px; }
-        h1 { margin-bottom: 20px; }
-        .form-container { max-width: 600px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input[type="text"], input[type="number"], input[type="datetime-local"], select, textarea {
-            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 1em;
-        }
-        textarea { min-height: 80px; }
-        button { padding: 12px 20px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1em; }
-        button:hover { background-color: #218838; }
-        .back-link { display: inline-block; margin-top: 20px; text-decoration: none; color: #007bff; }
-        .flash-messages { list-style: none; padding: 0; margin-bottom: 15px; } /* Flashメッセージ用 */
-        .flash-messages li { padding: 10px 15px; margin-bottom: 10px; border-radius: 4px; }
-        .flash-messages .danger { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-    </style>
 </head>
 <body>
-    <h1>新しい課題を追加</h1>
+    <div class="form-container-large">
+        <h1>新しい課題を追加</h1>
 
-    {# Flashメッセージの表示 (エラー時など) #}
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <ul class="flash-messages">
-        {% for category, message in messages %}
-          {% if category == 'danger' or category == 'warning' %} {# エラーと警告のみ表示 #}
-            <li class="{{ category }}">{{ message }}</li>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <ul class="flash-messages">
+            {% for category, message in messages %}
+              {% if category == 'danger' or category == 'warning' %}
+                <li class="{{ category }}">{{ message }}</li>
+              {% endif %}
+            {% endfor %}
+            </ul>
           {% endif %}
-        {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
+        {% endwith %}
 
-    <div class="form-container">
-        {# action属性は指定しなければ現在のURLにPOSTされる (/tasks/new) #}
         <form method="post">
             <div class="form-group">
                 <label for="title">課題名 (必須)</label>
-                {# エラー時に値を保持 #}
                 <input type="text" id="title" name="title" value="{{ title or '' }}" required>
             </div>
 
             <div class="form-group">
                 <label for="subject_name">教科</label>
                 <select id="subject_name" name="subject_name">
-                    <option value="">-- 教科を選択 --</option> {# デフォルト選択肢 #}
-                    {# app.pyから渡されたsubjectsリストで選択肢を生成 #}
+                    <option value="">-- 教科を選択 --</option>
                     {% for subject in subjects %}
-                        {# エラー時に選択を保持 #}
                         <option value="{{ subject.name }}" {% if subject.name == subject_name %}selected{% endif %}>
                             {{ subject.name }}
                         </option>
                     {% endfor %}
-                    <option value="その他">その他 (直接入力する場合は選択)</option> {# 教科管理にない場合用 #}
+                    <option value="その他">その他 (直接入力する場合は選択)</option>
                 </select>
-                {# 必要であれば、'その他'を選んだ時用のテキスト入力欄を追加 #}
             </div>
 
             <div class="form-group">
                 <label for="period">時間目 (1-8)</label>
-                {# エラー時に値を保持 #}
                 <input type="number" id="period" name="period" min="1" max="8" value="{{ period or '' }}">
             </div>
 
             <div class="form-group">
                 <label for="due_date">締切日時</label>
-                {# エラー時に値を保持 #}
                 <input type="datetime-local" id="due_date" name="due_date" value="{{ due_date or '' }}">
             </div>
 
             <div class="form-group">
                 <label for="priority">優先度</label>
                 <select id="priority" name="priority">
-                     {# エラー時に選択を保持 #}
                     <option value="高" {% if priority == '高' %}selected{% endif %}>高</option>
-                    <option value="中" {% if not priority or priority == '中' %}selected{% endif %}>中</option> {# デフォルト #}
+                    <option value="中" {% if not priority or priority == '中' %}selected{% endif %}>中</option>
                     <option value="低" {% if priority == '低' %}selected{% endif %}>低</option>
                 </select>
             </div>
@@ -90,8 +63,7 @@
             <div class="form-group">
                 <label for="status">ステータス (必須)</label>
                 <select id="status" name="status" required>
-                    {# エラー時に選択を保持 #}
-                    <option value="未着手" {% if not status or status == '未着手' %}selected{% endif %}>未着手</option> {# デフォルト #}
+                    <option value="未着手" {% if not status or status == '未着手' %}selected{% endif %}>未着手</option>
                     <option value="進行中" {% if status == '進行中' %}selected{% endif %}>進行中</option>
                     <option value="完了" {% if status == '完了' %}selected{% endif %}>完了</option>
                 </select>
@@ -99,21 +71,20 @@
 
             <div class="form-group">
                 <label for="estimated_time">想定所要時間 (分)</label>
-                 {# エラー時に値を保持 #}
                 <input type="number" id="estimated_time" name="estimated_time" min="0" value="{{ estimated_time or '' }}">
             </div>
 
             <div class="form-group">
                 <label for="details">詳細・メモ</label>
-                 {# エラー時に値を保持 #}
                 <textarea id="details" name="details" rows="4">{{ details or '' }}</textarea>
             </div>
 
-            <button type="submit">登録する</button>
+            <div class="submit-button-group">
+                <button type="submit" class="btn btn-success">登録する</button>
+            </div>
         </form>
     </div>
 
     <a href="{{ url_for('routes.tasks') }}" class="back-link">課題一覧に戻る</a>
-
 </body>
 </html>

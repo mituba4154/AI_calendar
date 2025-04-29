@@ -5,37 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ダッシュボード - スクールタスクプランナー</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <style>
-        body { font-family: sans-serif; margin: 20px; background-color: #f4f7f6; } /* 背景色を少し変更 */
-        .container { max-width: 900px; margin: 20px auto; background-color: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
-        .header h1 { margin: 0; font-size: 1.8em; }
-        .header .user-info { font-size: 0.9em; color: #555; }
-        .header .user-info a { color: #007bff; text-decoration: none; }
-        .flash-messages { list-style: none; padding: 0; margin-bottom: 20px; }
-        .flash-messages li { padding: 12px 18px; margin-bottom: 10px; border-radius: 4px; font-size: 0.95em; }
-        .flash-messages .success { background-color: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; }
-        .flash-messages .info { background-color: #cff4fc; color: #055160; border: 1px solid #b6effb; }
-        .flash-messages .warning { background-color: #fff3cd; color: #664d03; border: 1px solid #ffecb5; }
-        .flash-messages .danger { background-color: #f8d7da; color: #842029; border: 1px solid #f5c2c7; }
-
-        .welcome-message { margin-bottom: 30px; font-size: 1.1em; color: #333; }
-        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; } /* グリッドレイアウト */
-        .dashboard-section { background-color: #fdfdfd; padding: 20px; border-radius: 6px; border: 1px solid #eee; }
-        .dashboard-section h2 { font-size: 1.3em; margin-top: 0; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 8px; color: #343a40; }
-        .dashboard-section ul { list-style: none; padding: 0; margin: 0; }
-        .dashboard-section li { margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed #eee; }
-        .dashboard-section li:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-        .dashboard-section a { text-decoration: none; color: #007bff; font-weight: bold; }
-        .dashboard-section .task-meta { font-size: 0.85em; color: #6c757d; margin-top: 5px; }
-        .dashboard-section .no-items { color: #6c757d; font-style: italic; }
-        .dashboard-section .api-notice { font-size: 0.9em; color: #6c757d; margin-top: 15px; background-color: #e9ecef; padding: 10px; border-radius: 4px; }
-        .dashboard-section .api-notice a { color: #0056b3; }
-        .ai-recommendations { white-space: pre-wrap; /* AIの改行を反映 */ font-family: monospace; background-color:#f0f0f0; padding: 15px; border-radius: 4px; font-size: 0.9em; }
-        .quick-links ul { display: flex; flex-wrap: wrap; gap: 10px; padding: 0; list-style: none; margin-top: 10px;}
-        .quick-links li a { padding: 10px 15px; background-color: #e9ecef; border-radius: 4px; color: #333; transition: background-color 0.2s ease; font-size: 0.9em;}
-        .quick-links li a:hover { background-color: #dee2e6; }
-    </style>
 </head>
 <body>
     <div class="container">
@@ -47,7 +16,6 @@
             </div>
         </div>
 
-        {# Flashメッセージ表示エリア #}
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
             <ul class="flash-messages">
@@ -60,7 +28,6 @@
 
         <p class="welcome-message">ここから各機能にアクセスできます。</p>
 
-        {# 主要機能へのクイックリンク（セクション内に移動） #}
         <div class="dashboard-section quick-links">
              <h2>クイックアクセス</h2>
              <ul>
@@ -72,12 +39,9 @@
              </ul>
         </div>
 
-        {# --- グリッドレイアウトで表示 --- #}
         <div class="dashboard-grid">
-
-            {# --- 期限が近い課題セクション --- #}
             <div class="dashboard-section">
-                <h2><i class="bi bi-alarm"></i> 期限が近い課題 (3日以内)</h2> {# Bootstrap Icon例 #}
+                <h2><i class="bi bi-alarm"></i> 期限が近い課題 (3日以内)</h2>
                 {% if upcoming_tasks %}
                     <ul>
                         {% for task in upcoming_tasks %}
@@ -103,31 +67,23 @@
                 {% endif %}
             </div>
 
-            {# --- AIによる推奨セクション --- #}
             <div class="dashboard-section">
                 <h2><i class="bi bi-magic"></i> AIによる今日のおすすめ</h2>
-                {# APIキーが設定されているかチェック (app.pyから渡される変数) #}
                 {% if api_key_set %}
-                    {# AI推奨結果があるかチェック (app.pyから渡される変数) #}
                     {% if ai_recommendations %}
                         <div class="ai-recommendations">
-                            {{ ai_recommendations }} {# AIからの応答テキストをそのまま表示 #}
+                            {{ ai_recommendations }}
                         </div>
                     {% else %}
-                        {# APIキーはあるが、推奨がない場合（未完了タスクがない、APIエラー等）#}
                         <p class="no-items">おすすめのタスクはありません。または、推奨の取得中に問題が発生しました。</p>
-                        {# ここに更新ボタンなどを追加しても良い #}
                     {% endif %}
                 {% else %}
-                    {# APIキーが設定されていない場合 #}
                     <p class="api-notice">
                         AIによる推奨機能を利用するには、<a href="{{ url_for('routes.settings') }}">設定ページ</a>でAPIキーを登録してください。(現在この機能は準備中です)
                     </p>
                 {% endif %}
             </div>
-
-        </div> {# end .dashboard-grid #}
-
-    </div> {# end .container #}
+        </div>
+    </div>
 </body>
 </html>
