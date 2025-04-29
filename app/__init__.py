@@ -1,12 +1,11 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 import logging
 import os
 import click
 from werkzeug.security import generate_password_hash
 
-# データベースオブジェクトを初期化（循環インポート回避のため先に定義）
-db = SQLAlchemy()
+# SQLAlchemyインスタンスをextensionsからインポート
+from app.extensions import db
 
 def create_app():
     """アプリケーションファクトリ関数：設定を読み込み、Flaskアプリを作成して返す"""
@@ -31,14 +30,12 @@ def create_app():
     from app.routes import bp as routes_bp
     app.register_blueprint(routes_bp)
     
-    # モデルのインポート（循環インポート回避のためここで）
-    from app.models import User, Subject, Task
-    
     # CLIコマンドを登録
     @app.cli.command("create-user")
     @click.argument("email")
     @click.password_option()
     def create_user(email, password):
+        from app.models import User
         if '@' not in email:
             print("Error: 無効なメールアドレス形式です。")
             return
@@ -61,6 +58,7 @@ def create_app():
     
     # 起動時にデータベースの作成と確認
     with app.app_context():
+        from app.models import User, Subject, Task  # 循環インポートを避けるためここでインポート
         db.create_all()
         app.logger.info("--- Database tables checked/created (if necessary) ---")
         
