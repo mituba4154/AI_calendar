@@ -7,7 +7,7 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     # デバッグ関連の設定
-    DEBUG_SKIP_LOGIN_CHECK = True  # 本番環境では必ずFalseにする
+    DEBUG_SKIP_LOGIN_CHECK = False  # 本番環境では必ずFalseにする
     DEBUG_SKIP_LOGIN_EMAIL = "debug@example.com"
     
     # ロギング設定
@@ -23,7 +23,7 @@ class Config:
     PERMANENT_SESSION_LIFETIME = 86400  # セッション有効期間（秒）- デフォルト24時間
     
     # セキュリティ設定
-    SESSION_COOKIE_SECURE = False  # HTTPSを使用する場合はTrueに設定
+    SESSION_COOKIE_SECURE = True  # HTTPSを使用する場合はTrueに設定
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = 'Lax'
     
