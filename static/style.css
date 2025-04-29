@@ -1,19 +1,58 @@
-/* --- 基本的なリセットとbodyのスタイル --- */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+:root {
+    /* Windows 11風カラーパレット */
+    --color-bg-main: #f5f5f5;
+    --color-bg-card: #ffffff;
+    --color-bg-card-glass: rgba(255,255,255,0.95);
+    --color-bg-accent: #f0f5fa;
+    --color-bg-hover: #e3f2fd;
+    --color-shadow: 0 2px 15px rgba(0,0,0,0.06);
+
+    --color-border-main: rgba(0,0,0,0.05);
+    --color-border-table: #eaeaea;
+
+    --color-text-main: #202020;
+    --color-text-muted: #555;
+    --color-text-link: #0078d7;
+    --color-text-link-hover: #0067b8;
+    --color-text-btn: #fff;
+    --color-text-btn-dark: #212529;
+
+    --color-primary: #0078d7;
+    --color-primary-dark: #0067b8;
+    --color-secondary: #6c757d;
+    --color-secondary-dark: #5a6268;
+    --color-success: #28a745;
+    --color-success-dark: #218838;
+    --color-danger: #dc3545;
+    --color-danger-dark: #c82333;
+    --color-warning: #ffc107;
+    --color-warning-dark: #e0a800;
+    --color-info: #17a2b8;
+    --color-info-dark: #138496;
+
+    --radius-main: 12px;
+    --radius-btn: 8px;
+    --radius-sm: 6px;
+
+    --shadow-main: 0 2px 15px rgba(0,0,0,0.06);
+    --shadow-hover: 0 4px 15px rgba(0,0,0,0.08);
+
+    --font-main: 'Segoe UI', 'Yu Gothic UI', sans-serif;
+    --font-mono: 'Consolas', 'Courier New', monospace;
 }
 
+/* --- 基本リセット --- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f7f6;
-    color: #333;
+    font-family: var(--font-main);
+    background-color: var(--color-bg-main);
+    color: var(--color-text-main);
     line-height: 1.6;
     padding: 20px;
 }
 
-/* --- 認証ページ (Login/Signup) --- */
+/* --- 認証ページ --- */
 body.auth-page-body {
     display: flex;
     flex-direction: column;
@@ -21,52 +60,21 @@ body.auth-page-body {
     align-items: center;
     min-height: 100vh;
     padding: 20px;
+    background-color: var(--color-bg-main);
 }
 
 /* --- コンテナ --- */
 .container {
     max-width: 1100px;
     margin: 0 auto;
-    background-color: #fff;
-    padding: 25px 40px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    background-color: var(--color-bg-card-glass);
+    padding: 30px 40px;
+    border-radius: var(--radius-main);
+    box-shadow: var(--shadow-main);
+    border: 1px solid var(--color-border-main);
     margin-top: 20px;
     margin-bottom: 20px;
-}
-
-/* --- ヘッダー --- */
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #eee;
-}
-
-.header h1 {
-    margin: 0;
-    font-size: 1.8em;
-}
-
-.header .user-info {
-    font-size: 0.9em;
-    color: #555;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.header .user-info a {
-    color: #007bff;
-    text-decoration: none;
-}
-
-.header .actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+    backdrop-filter: blur(10px);
 }
 
 /* --- Flashメッセージ --- */
@@ -77,179 +85,103 @@ body.auth-page-body {
     width: 100%;
     max-width: 960px;
 }
-
-.auth-page-body .flash-messages {
-    max-width: 400px;
-}
-
-.container .flash-messages {
-    max-width: 100%;
-}
-
 .flash-messages li {
-    padding: 12px 20px;
-    margin-bottom: 10px;
-    border: 1px solid transparent;
-    border-radius: 4px;
+    padding: 15px 20px;
+    margin-bottom: 12px;
+    border: none;
+    border-radius: var(--radius-main);
     text-align: center;
     font-size: 0.95em;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.04);
 }
-
-.flash-messages li:last-child {
-    margin-bottom: 0;
-}
-
-.flash-messages li.info { color: #0c5460; background-color: #d1ecf1; border-color: #bee5eb; }
-.flash-messages li.success { color: #155724; background-color: #d4edda; border-color: #c3e6cb; }
-.flash-messages li.warning { color: #856404; background-color: #fff3cd; border-color: #ffeeba; }
-.flash-messages li.danger { color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; }
+.flash-messages li.info { color: #0c5460; background-color: #e1f5fe; }
+.flash-messages li.success { color: #1e7e34; background-color: #e6f7e9; }
+.flash-messages li.warning { color: #856404; background-color: #fff8e6; }
+.flash-messages li.danger { color: #721c24; background-color: #ffeaee; }
 
 /* --- ボタン --- */
 .btn {
     display: inline-block;
-    padding: 10px 20px;
-    color: white;
+    padding: 10px 22px;
+    color: var(--color-text-btn);
     border: none;
-    border-radius: 4px;
+    border-radius: var(--radius-btn);
     font-size: 1em;
-    font-weight: bold;
+    font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    transition: all 0.2s ease;
     text-decoration: none;
     text-align: center;
     margin: 5px;
     line-height: 1.5;
     vertical-align: middle;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
 }
-
-.btn-sm {
-    padding: 5px 10px;
-    font-size: 0.85em;
-}
-
-.btn-primary { background-color: #007bff; border: 1px solid #007bff; }
-.btn-primary:hover { background-color: #0056b3; border-color: #0056b3; }
-
-.btn-secondary { background-color: #6c757d; border: 1px solid #6c757d; }
-.btn-secondary:hover { background-color: #5a6268; border-color: #5a6268; }
-
-.btn-success { background-color: #28a745; border: 1px solid #28a745; }
-.btn-success:hover { background-color: #218838; border-color: #218838; }
-
-.btn-danger { background-color: #dc3545; border: 1px solid #dc3545; }
-.btn-danger:hover { background-color: #c82333; border-color: #c82333; }
-
-.btn-warning { background-color: #ffc107; color: #212529; border: 1px solid #ffc107; }
-.btn-warning:hover { background-color: #e0a800; border-color: #e0a800; }
-
-.btn-info { background-color: #17a2b8; border: 1px solid #17a2b8; }
-.btn-info:hover { background-color: #138496; border-color: #138496; }
-
-.btn-block {
-    width: 100%;
-    display: block;
-}
+.btn-sm { padding: 6px 12px; font-size: 0.85em; border-radius: var(--radius-sm);}
+.btn-primary { background-color: var(--color-primary); border: 1px solid var(--color-primary-dark);}
+.btn-primary:hover { background-color: var(--color-primary-dark);}
+.btn-secondary { background-color: var(--color-secondary); border: 1px solid var(--color-secondary-dark);}
+.btn-secondary:hover { background-color: var(--color-secondary-dark);}
+.btn-success { background-color: var(--color-success); border: 1px solid var(--color-success-dark);}
+.btn-success:hover { background-color: var(--color-success-dark);}
+.btn-danger { background-color: var(--color-danger); border: 1px solid var(--color-danger-dark); color: var(--color-text-btn);}
+.btn-danger:hover { background-color: var(--color-danger-dark);}
+.btn-warning { background-color: var(--color-warning); color: var(--color-text-btn-dark); border: 1px solid var(--color-warning-dark);}
+.btn-warning:hover { background-color: var(--color-warning-dark);}
+.btn-info { background-color: var(--color-info); border: 1px solid var(--color-info-dark);}
+.btn-info:hover { background-color: var(--color-info-dark);}
+.btn-block { width: 100%; display: block; }
 
 /* --- 認証フォーム --- */
 .auth-form-container {
-    background-color: #ffffff;
-    padding: 30px 40px;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-bg-card);
+    padding: 35px 40px;
+    border-radius: var(--radius-main);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
     width: 100%;
     max-width: 400px;
     text-align: center;
+    border: 1px solid var(--color-border-main);
+    backdrop-filter: blur(10px);
 }
-
-.auth-form-container h2 {
-    margin-bottom: 25px;
-    color: #555;
-    font-weight: 600;
-}
-
-.auth-form-container .form-group {
-    margin-bottom: 20px;
-    text-align: left;
-}
-
-.auth-form-container label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #666;
-    font-size: 0.9em;
-}
-
+.auth-form-container h2 { margin-bottom: 30px; color: #333; font-weight: 500; }
+.auth-form-container .form-group { margin-bottom: 24px; text-align: left; }
+.auth-form-container label { display: block; margin-bottom: 8px; font-weight: 500; color: #444; font-size: 0.95em; }
 .auth-form-container input[type="email"],
 .auth-form-container input[type="password"] {
     width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 12px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: var(--radius-btn);
     font-size: 1em;
-    transition: border-color 0.3s ease;
+    transition: all 0.2s ease;
 }
-
 .auth-form-container input:focus {
     outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(0,120,215,0.2);
 }
-
-.auth-form-container .btn {
-    margin-top: 15px;
-}
+.auth-form-container .btn { margin-top: 20px; }
 
 /* --- 認証フォーム切り替えリンク --- */
-.switch-link {
-    margin-top: 25px;
-    font-size: 0.9em;
-    color: #555;
-}
+.switch-link { margin-top: 30px; font-size: 0.95em; color: #666; }
+.switch-link a { color: var(--color-primary); text-decoration: none; font-weight: 500; }
+.switch-link a:hover { text-decoration: underline; }
 
-.switch-link a {
-    color: #007bff;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.switch-link a:hover {
-    text-decoration: underline;
-}
-
-/* --- タスク登録/編集フォーム --- */
+/* --- 汎用フォーム要素 --- */
 .form-container-large {
-    background-color: #ffffff;
-    padding: 30px 40px;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-bg-card);
+    padding: 35px 40px;
+    border-radius: var(--radius-main);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
     width: 100%;
     max-width: 700px;
     margin: 20px auto;
+    border: 1px solid var(--color-border-main);
 }
-
-.form-container-large h1 {
-    margin-bottom: 30px;
-    color: #555;
-    font-weight: 600;
-    text-align: center;
-    font-size: 1.8em;
-}
-
-.form-group {
-    margin-bottom: 18px;
-    text-align: left;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: bold;
-    color: #666;
-    font-size: 0.9em;
-}
-
-/* --- フォーム入力要素 --- */
+.form-container-large h1 { margin-bottom: 30px; color: #333; font-weight: 500; text-align: center; font-size: 1.8em; }
+.form-group { margin-bottom: 22px; text-align: left; }
+.form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: #444; font-size: 0.95em; }
 input[type="text"],
 input[type="number"],
 input[type="datetime-local"],
@@ -259,151 +191,134 @@ select,
 textarea {
     display: block;
     width: 100%;
-    padding: 10px 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 12px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: var(--radius-btn);
     font-size: 1em;
-    transition: border-color 0.3s ease;
+    transition: all 0.2s ease;
     background-color: #fff;
     color: #333;
 }
-
-textarea {
-    min-height: 100px;
-    resize: vertical;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
+textarea { min-height: 100px; resize: vertical; }
+input:focus, select:focus, textarea:focus {
     outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(0,120,215,0.2);
 }
+.form-container-large .form-group small { font-size: 0.85em; color: #777; margin-top: 6px; display: inline-block; }
+.form-container-large .submit-button-group { text-align: center; margin-top: 35px; }
+.form-container-large .submit-button-group .btn { padding: 12px 30px; font-size: 1.1em; }
 
-.form-container-large .form-group small {
-    font-size: 0.8em;
-    color: #6c757d;
-    margin-top: 5px;
-    display: inline-block;
+/* --- ヘッダー --- */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--color-border-table);
 }
-
-.form-container-large .submit-button-group {
-    text-align: center;
-    margin-top: 30px;
+.header h1 { margin: 0; font-size: 1.8em; color: #333; font-weight: 500; }
+.header .user-info {
+    font-size: 0.95em;
+    color: var(--color-text-muted);
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
-
-.form-container-large .submit-button-group .btn {
-    padding: 12px 30px;
-    font-size: 1.1em;
+.header .user-info a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: var(--radius-sm);
 }
+.header .user-info a.btn-danger {
+    background: var(--color-danger);
+    color: var(--color-text-btn);
+    font-weight: bold;
+}
+.header .user-info a.btn-danger:hover {
+    background: var(--color-danger-dark);
+}
+.header .user-info a:hover { color: var(--color-primary-dark); }
+.header .actions { display: flex; flex-wrap: wrap; gap: 10px; }
 
 /* --- ダッシュボード --- */
-.welcome-message {
-    margin-bottom: 30px;
-    font-size: 1.1em;
-    color: #333;
-}
-
+.welcome-message { margin-bottom: 30px; font-size: 1.1em; color: #444; }
 .dashboard-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 25px;
 }
-
 .dashboard-section {
-    background-color: #fdfdfd;
-    padding: 20px;
-    border-radius: 6px;
-    border: 1px solid #eee;
+    background-color: var(--color-bg-card);
+    padding: 25px;
+    border-radius: var(--radius-main);
+    border: 1px solid var(--color-border-main);
+    box-shadow: var(--shadow-main);
+    transition: transform 0.2s, box-shadow 0.2s;
+    backdrop-filter: blur(10px);
 }
-
+.dashboard-section:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
 .dashboard-section h2 {
     font-size: 1.3em;
     margin-top: 0;
-    margin-bottom: 15px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 8px;
-    color: #343a40;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--color-border-table);
+    padding-bottom: 12px;
+    color: #333;
+    font-weight: 500;
 }
-
-.dashboard-section ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.dashboard-section li {
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px dashed #eee;
-}
-
-.dashboard-section li:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
-}
-
-.dashboard-section a {
-    text-decoration: none;
-    color: #007bff;
-    font-weight: bold;
-}
-
-.dashboard-section .task-meta {
-    font-size: 0.85em;
-    color: #6c757d;
-    margin-top: 5px;
-}
-
-.dashboard-section .no-items {
-    color: #6c757d;
-    font-style: italic;
-}
-
+.dashboard-section ul { list-style: none; padding: 0; margin: 0; }
+.dashboard-section li { margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed #eee; }
+.dashboard-section li:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.dashboard-section a { text-decoration: none; color: var(--color-primary); font-weight: 500; transition: color 0.2s; }
+.dashboard-section a:hover { color: var(--color-primary-dark); }
+.dashboard-section .task-meta { font-size: 0.85em; color: #777; margin-top: 6px; }
+.dashboard-section .no-items { color: #777; font-style: italic; }
 .dashboard-section .api-notice {
     font-size: 0.9em;
-    color: #6c757d;
+    color: #777;
     margin-top: 15px;
-    background-color: #e9ecef;
-    padding: 10px;
-    border-radius: 4px;
+    background-color: var(--color-bg-accent);
+    padding: 12px;
+    border-radius: var(--radius-btn);
 }
-
-.dashboard-section .api-notice a {
-    color: #0056b3;
-}
-
+.dashboard-section .api-notice a { color: var(--color-primary); }
 .ai-recommendations {
     white-space: pre-wrap;
-    font-family: monospace;
-    background-color: #f0f0f0;
+    font-family: var(--font-mono);
+    background-color: var(--color-bg-accent);
     padding: 15px;
-    border-radius: 4px;
+    border-radius: var(--radius-btn);
     font-size: 0.9em;
 }
-
 .quick-links ul {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 12px;
     padding: 0;
     list-style: none;
-    margin-top: 10px;
+    margin-top: 12px;
 }
-
 .quick-links li a {
-    padding: 10px 15px;
-    background-color: #e9ecef;
-    border-radius: 4px;
-    color: #333;
-    transition: background-color 0.2s ease;
-    font-size: 0.9em;
+    padding: 12px 18px;
+    background-color: var(--color-bg-accent);
+    border-radius: var(--radius-btn);
+    color: var(--color-primary);
+    transition: all 0.2s;
+    font-size: 0.95em;
+    display: block;
 }
-
 .quick-links li a:hover {
-    background-color: #dee2e6;
+    background-color: var(--color-bg-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
 }
 
 /* --- 課題一覧テーブル --- */
@@ -411,88 +326,54 @@ textarea:focus {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 35px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--color-border-table);
     flex-wrap: wrap;
     gap: 15px;
 }
-
-.tasks-header h1 {
-    margin: 0;
-    font-size: 2em;
-    color: #343a40;
-    flex-grow: 1;
-}
-
-.tasks-header .user-info {
-    color: #495057;
-    font-size: 0.95em;
-    white-space: nowrap;
-}
-
-.tasks-header .actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: flex-end;
-}
-
+.tasks-header h1 { margin: 0; font-size: 2em; color: #333; font-weight: 500; flex-grow: 1; }
+.tasks-header .user-info { color: #555; font-size: 0.95em; white-space: nowrap; display: flex; align-items: center; gap: 12px; }
+.tasks-header .actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; }
 .tasks-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     margin-top: 20px;
-    font-size: 0.9em;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    font-size: 0.95em;
+    box-shadow: var(--shadow-main);
     background-color: #fff;
+    border-radius: var(--radius-main);
+    overflow: hidden;
 }
-
-.tasks-table th,
-.tasks-table td {
-    border: 1px solid #e9ecef;
-    padding: 12px 15px;
+.tasks-table th, .tasks-table td {
+    border: none;
+    border-bottom: 1px solid var(--color-border-table);
+    padding: 14px 18px;
     text-align: left;
     vertical-align: middle;
 }
-
 .tasks-table th {
     background-color: #f8f9fa;
-    font-weight: 600;
-    color: #495057;
+    font-weight: 500;
+    color: #444;
     white-space: nowrap;
 }
-
-.tasks-table tbody tr:nth-child(even) {
-    background-color: #fdfdfe;
-}
-
-.tasks-table tbody tr:hover {
-    background-color: #f1f3f5;
-}
-
-.tasks-table .actions {
-    text-align: center;
-    white-space: nowrap;
-}
-
-.tasks-table .actions form {
-    display: inline-block;
-    margin: 0 3px;
-}
-
-.tasks-table .actions .btn {
-    padding: 5px 10px;
-    font-size: 0.85em;
-}
-
+.tasks-table tbody tr:last-child td { border-bottom: none; }
+.tasks-table tbody tr:nth-child(even) { background-color: #fafafa; }
+.tasks-table tbody tr:hover { background-color: var(--color-bg-hover); }
+.tasks-table .actions { text-align: center; white-space: nowrap; }
+.tasks-table .actions form { display: inline-block; margin: 0 3px; }
+.tasks-table .actions .btn { padding: 6px 12px; font-size: 0.85em; }
 .no-tasks {
-    color: #6c757d;
-    margin-top: 20px;
+    color: #777;
+    margin-top: 25px;
     text-align: center;
-    padding: 30px;
-    background-color: #e9ecef;
-    border-radius: 4px;
+    padding: 35px;
+    background-color: #f9f9f9;
+    border-radius: var(--radius-main);
     font-size: 1.1em;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
 }
 
 /* --- 戻るリンク --- */
@@ -501,231 +382,178 @@ textarea:focus {
     text-align: center;
     margin: 30px auto;
     text-decoration: none;
-    color: #007bff;
-    font-weight: bold;
+    color: var(--color-primary);
+    font-weight: 500;
     font-size: 1em;
+    padding: 8px 16px;
+    background-color: #f5f9fd;
+    border-radius: var(--radius-btn);
+    width: fit-content;
+    transition: all 0.2s;
 }
-
 .back-link:hover {
-    text-decoration: underline;
+    background-color: var(--color-bg-hover);
+    text-decoration: none;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
 }
 
 /* --- カレンダー --- */
 #calendar {
     max-width: 1100px;
     margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: var(--radius-main);
+    box-shadow: var(--shadow-main);
 }
-
-.fc-event {
-    border: none !important;
+.fc-header-toolbar { margin-bottom: 1.5em !important; }
+.fc-toolbar-title { font-size: 1.5em !important; font-weight: 500 !important; color: #333 !important; }
+.fc-button-primary {
+    background-color: var(--color-primary) !important;
+    border-color: var(--color-primary-dark) !important;
+    border-radius: var(--radius-sm) !important;
 }
-
-.fc-event-main {
-    cursor: pointer;
-}
-
+.fc-button-primary:hover { background-color: var(--color-primary-dark) !important; }
+.fc-event { border: none !important; border-radius: var(--radius-sm) !important; box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important; }
+.fc-event-main { cursor: pointer; padding: 4px 8px !important; }
+.fc-theme-standard td, .fc-theme-standard th { border-color: var(--color-border-table) !important; }
+.fc-theme-standard .fc-scrollgrid { border-color: var(--color-border-table) !important; }
 .tooltip {
     position: absolute;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(40,40,40,0.85);
     color: white;
-    padding: 5px 10px;
-    border-radius: 4px;
+    padding: 8px 12px;
+    border-radius: var(--radius-btn);
     font-size: 0.85em;
     white-space: pre-wrap;
     z-index: 100;
     pointer-events: none;
     display: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
 /* --- 設定ページ --- */
 .settings-section {
     margin-bottom: 30px;
-    padding: 25px;
-    background-color: #f8f9fa;
-    border-radius: 5px;
-    border: 1px solid #dee2e6;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: var(--radius-main);
+    border: 1px solid var(--color-border-main);
+    box-shadow: var(--shadow-main);
 }
-
 .settings-section h2 {
     margin-top: 0;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     font-size: 1.4em;
-    border-bottom: 1px solid #dee2e6;
-    padding-bottom: 10px;
-    color: #495057;
+    border-bottom: 1px solid var(--color-border-table);
+    padding-bottom: 12px;
+    color: #333;
+    font-weight: 500;
 }
-
-/* 設定ページのフォーム入力要素 */
-.settings-section .form-group {
-    margin-bottom: 20px;
-}
-
-.api-key-note {
-    font-size: 0.9em;
-    color: #6c757d;
-    margin-top: 8px;
-    line-height: 1.4;
-}
-
+.api-key-note { font-size: 0.9em; color: #777; margin-top: 10px; line-height: 1.5; }
 .api-status-message {
-    margin-bottom: 15px;
-    font-weight: bold;
+    margin-bottom: 20px;
+    font-weight: 500;
     font-size: 0.95em;
-    padding: 8px 12px;
-    border-radius: 4px;
+    padding: 12px 15px;
+    border-radius: var(--radius-btn);
 }
-
-.api-status-ok {
-    color: #155724;
-    background-color: #d4edda;
-    border: 1px solid #c3e6cb;
-}
-
-.api-status-warning {
-    color: #856404;
-    background-color: #fff3cd;
-    border: 1px solid #ffeeba;
-}
+.api-status-ok { color: #1e7e34; background-color: #e6f7e9; }
+.api-status-warning { color: #856404; background-color: #fff8e6; }
 
 /* --- 教科管理ページ --- */
 .subject-registration {
     margin-bottom: 30px;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 5px;
-    border: 1px solid #dee2e6;
+    padding: 25px;
+    background-color: #fff;
+    border-radius: var(--radius-main);
+    border: 1px solid var(--color-border-main);
+    box-shadow: var(--shadow-main);
 }
-
-.subject-registration h2 {
-    margin-top: 0;
-    margin-bottom: 15px;
-    font-size: 1.2em;
-}
-
-.subject-registration .form-inline {
-    display: flex;
-    align-items: center;
-}
-
+.subject-registration h2 { margin-top: 0; margin-bottom: 20px; font-size: 1.3em; color: #333; font-weight: 500; }
+.subject-registration .form-inline { display: flex; align-items: center; gap: 10px; }
 .subject-registration input[type="text"] {
     flex-grow: 1;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-right: 10px;
+    padding: 12px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: var(--radius-btn);
     font-size: 1em;
+    transition: all 0.2s;
 }
-
 .subject-registration button {
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: white;
+    padding: 12px 20px;
+    background-color: var(--color-primary);
+    color: var(--color-text-btn);
     border: none;
-    border-radius: 4px;
+    border-radius: var(--radius-btn);
     cursor: pointer;
     font-size: 1em;
+    transition: all 0.2s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
 }
-
 .subject-registration button:hover {
-    background-color: #0056b3;
+    background-color: var(--color-primary-dark);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+    transform: translateY(-1px);
 }
-
-.subject-list h2 {
-    font-size: 1.2em;
-    margin-bottom: 15px;
-}
-
-.subject-list ul {
-    list-style: none;
-    padding: 0;
-}
-
+.subject-list h2 { font-size: 1.3em; margin-bottom: 20px; color: #333; font-weight: 500; }
+.subject-list ul { list-style: none; padding: 0; }
 .subject-list li {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 15px;
-    border: 1px solid #dee2e6;
-    border-radius: 4px;
-    margin-bottom: 10px;
-    background-color: white;
+    padding: 15px 20px;
+    border: 1px solid #eaeaea;
+    border-radius: var(--radius-btn);
+    margin-bottom: 12px;
+    background-color: #fff;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
-
-.subject-list li span {
-    flex-grow: 1;
-    margin-right: 15px;
+.subject-list li:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
-
-.subject-list li form {
-    margin: 0;
-}
-
+.subject-list li span { flex-grow: 1; margin-right: 15px; font-size: 1.05em; color: #333; }
+.subject-list li form { margin: 0; }
 .subject-list li button {
-    background-color: #dc3545;
-    color: white;
-    border: 1px solid #dc3545;
+    background-color: var(--color-danger);
+    color: var(--color-text-btn);
+    border: none;
     font-size: 0.85em;
-    padding: 5px 10px;
-    border-radius: 3px;
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
     cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
 }
-
 .subject-list li button:hover {
-    background-color: #c82333;
-    border-color: #bd2130;
+    background-color: var(--color-danger-dark);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+    transform: translateY(-1px);
 }
-
 .no-subjects {
-    color: #6c757d;
+    color: #777;
+    font-style: italic;
+    text-align: center;
+    padding: 25px;
+    background-color: #f9f9f9;
+    border-radius: var(--radius-main);
+    margin-top: 20px;
 }
 
-/* --- レスポンシブ対応 --- */
+/* --- レスポンシブ --- */
 @media (max-width: 768px) {
-    body {
-        padding: 10px;
-    }
-    
-    .container {
-        padding: 20px;
-    }
-    
-    .tasks-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .tasks-header h1 {
-        margin-bottom: 15px;
-    }
-    
-    .tasks-header .user-info {
-        margin-bottom: 10px;
-    }
-    
-    .tasks-header .actions {
-        width: 100%;
-        justify-content: flex-start;
-    }
-    
-    .tasks-table th,
-    .tasks-table td {
-        padding: 8px 10px;
-    }
-    
-    .tasks-table .actions .btn {
-        padding: 4px 8px;
-        font-size: 0.8em;
-    }
-    
-    .form-container-large {
-        padding: 20px;
-    }
-    
-    .form-container-large h1 {
-        font-size: 1.5em;
-    }
-    
-    .auth-form-container {
-        padding: 20px;
-    }
+    body { padding: 12px; }
+    .container { padding: 20px; }
+    .tasks-header { flex-direction: column; align-items: flex-start; }
+    .tasks-header h1 { margin-bottom: 15px; }
+    .tasks-header .user-info { margin-bottom: 12px; }
+    .tasks-header .actions { width: 100%; justify-content: flex-start; }
+    .tasks-table th, .tasks-table td { padding: 10px 12px; }
+    .tasks-table .actions .btn { padding: 5px 10px; font-size: 0.8em; }
+    .form-container-large { padding: 25px; }
+    .form-container-large h1 { font-size: 1.5em; }
+    .auth-form-container { padding: 25px; }
+    .dashboard-grid { grid-template-columns: 1fr; }
 }
