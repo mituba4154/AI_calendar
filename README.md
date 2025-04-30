@@ -37,58 +37,60 @@
 ├── install.bat/.sh         # セットアップスクリプト
 └── その他ログ/設定ファイル
 
-セットアップ方法
-仮想環境の作成・有効化
+#セットアップ方法
+
+##仮想環境の作成・有効化
+
 python -m venv venv
-Use code with caution.
-Bash
-Windowsの場合:
+ 
+
+##Windowsの場合:
 venv\Scripts\activate
-Use code with caution.
-Bash
-macOS/Linuxの場合:
+ 
+
+##macOS/Linuxの場合:
 source venv/bin/activate
-Use code with caution.
-Bash
-パッケージインストール
+ 
+
+##パッケージインストール
 pip install -r requirements.txt
-Use code with caution.
-Bash
-データベース初期化
+ 
+
+##データベース初期化
 初回起動時に instance/database.db が自動で作成されます。
 サーバー起動
-Windowsの場合:
+
+###Windowsの場合:
 start.bat
-Use code with caution.
-Bash
-macOS/Linuxの場合:
+ 
+
+###macOS/Linuxの場合:
 sh start.sh
-Use code with caution.
-Bash
-または、直接実行:
+ 
+###または、直接実行:
 python app.py
-Use code with caution.
-Bash
-デフォルトで http://localhost:53833 でアクセスできます。
+ 
+ 
+##デフォルトで http://localhost:53833 でアクセスできます。
 ユーザー管理（CLIコマンド）
 ユーザー作成
 flask create-user メールアドレス
-Use code with caution.
-Bash
+ 
+ 
 例:
 flask create-user user@example.com
-Use code with caution.
-Bash
+ 
+ 
 パスワード入力を求められます（6文字以上）。
 ユーザー一覧
 flask list-users
-Use code with caution.
-Bash
+ 
+ 
 ユーザー削除
 flask delete-user メールアドレス
-Use code with caution.
-Bash
-主な機能
+ 
+ 
+##主な機能
 ダッシュボード: 期限が近い課題を表示、AIによるおすすめ機能（APIキー設定時）。
 課題一覧: テーブル形式表示。スマートフォンではカード形式表示に自動で切り替え。
 課題管理: 課題の登録、編集、削除機能。
@@ -103,7 +105,8 @@ SECRET_KEY: 本番環境で運用する際は、app/config.py 内の SECRET_KEY 
 HTTPS: 本番運用時はHTTPS化を強く推奨します。HTTPS化後に app/config.py で SESSION_COOKIE_SECURE=True を設定してください。
 データベースファイル: instance/database.db は .gitignore に含まれており、Gitリポジトリには含まれません。
 アカウント登録: Webインターフェースからの新規アカウント登録はできません。管理者がCLIコマンドを使用してユーザーを作成する必要があります。
-よくある質問
+
+#よくある質問
 Q. DBファイルをGitに含めたくない
 A. .gitignore ファイルに instance/database.db の行を追加してください（デフォルトで追加済みのはずです）。
 Q. スマートフォンでUI表示が崩れる
