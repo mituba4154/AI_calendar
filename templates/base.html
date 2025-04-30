@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}スクールタスクプランナー{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body{% block body_class %}{% endblock %}>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class="flash-messages">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+
+    <script src="{{ url_for('static', filename='js/error_handler.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+    
+    <script>
+        // フォームのバリデーションを設定
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                const errors = ErrorHandler.validateForm(this);
+                if (Object.keys(errors).length > 0) {
+                    e.preventDefault();
+                    ErrorHandler.handleFormValidationError(this, errors);
+                }
+            });
+        });
+
+        // APIリクエストのエラーハンドリングを設定
+        window.fetchWithErrorHandling = async function(url, options = {}) {
+            try {
+                const response = await fetch(url, options);
+                return await ErrorHandler.handleApiError(response);
+            } catch (error) {
+                ErrorHandler.handleNetworkError();
+                throw error;
+            }
+        };
+    </script>
+</body>
+</html> 
