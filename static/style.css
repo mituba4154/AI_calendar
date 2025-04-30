@@ -76,7 +76,7 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--primary);bo
 .tasks-header h1{margin:0;font-size:2em;color:#333;font-weight:500;flex-grow:1}
 .tasks-header .user-info{color:#555;font-size:.95em;white-space:nowrap;display:flex;align-items:center;gap:12px}
 .tasks-header .actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}
-.tasks-table{width:100%;border-collapse:separate;border-spacing:0;margin-top:20px;font-size:.95em;box-shadow:var(--shadow);background:#fff;border-radius:var(--rmain);overflow:hidden}
+.tasks-table{width:100%;border-collapse:separate;border-spacing:0;margin-top:20px;font-size:.95em;box-shadow:var(--shadow);background:#fff;border-radius:var(--rmain);overflow-x:auto}
 .tasks-table td,.tasks-table th{border:none;border-bottom:1px solid var(--btable);padding:14px 18px;text-align:left;vertical-align:middle}
 .tasks-table th{background:#f8f9fa;font-weight:500;color:#444;white-space:nowrap}
 .tasks-table tbody tr:last-child td{border-bottom:none}
@@ -118,6 +118,76 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--primary);bo
 .subject-list li button{background:var(--danger);color:var(--tbtn);border:none;font-size:.85em;padding:6px 12px;border-radius:var(--rsm);cursor:pointer;transition:all .2s;box-shadow:0 2px 4px rgba(0,0,0,.08)}
 .subject-list li button:hover{background:var(--dangerd);box-shadow:0 3px 6px rgba(0,0,0,.15);transform:translateY(-1px)}
 .no-subjects{color:#777;font-style:italic;text-align:center;padding:25px;background:#f9f9f9;border-radius:var(--rmain);margin-top:20px}
-@media (max-width:900px){.container{padding:12px}.form-container-large{padding:12px}.auth-form-container{padding:12px;width:97%}.dashboard-section{padding:12px}}
-@media (max-width:768px){body{padding:8px}.container{padding:8px}.header,.tasks-header{flex-direction:column;align-items:flex-start}.header h1,.tasks-header h1{margin-bottom:15px;font-size:1.3em}.header .user-info,.tasks-header .user-info{margin-bottom:12px;flex-direction:column;align-items:flex-start;gap:8px}.header .actions,.tasks-header .actions{width:100%;justify-content:flex-start;margin-top:10px}.btn{padding:12px 20px;margin:2px;font-size:1em;min-height:44px;min-width:44px}.btn-sm{padding:8px 15px}.tasks-table{display:block;overflow-x:auto}.tasks-table td,.tasks-table th{padding:10px;font-size:.9em}.tasks-table .actions .btn{padding:8px 12px;font-size:.9em;display:block;margin:5px 0;width:100%}.tasks-table .actions form{display:block;margin:5px 0}.form-container-large{padding:10px}.form-container-large h1{font-size:1.1em}.auth-form-container{padding:10px;width:99%}.dashboard-grid{grid-template-columns:1fr}.dashboard-section{padding:8px}.quick-links ul{flex-direction:column;gap:8px}.quick-links li{width:100%}.quick-links li a{padding:14px;text-align:center;font-size:1em}.fc-header-toolbar{flex-direction:column!important;gap:10px!important}.fc-toolbar-chunk{width:100%!important;display:flex!important;justify-content:center!important;margin:5px 0!important}.fc-toolbar-title{font-size:1.2em!important}.fc-view-harness{height:400px!important}.subject-registration .form-inline{flex-direction:column}.subject-registration input[type=text]{margin-bottom:10px;width:100%}.subject-registration button{width:100%}.subject-list li{flex-direction:column;align-items:stretch}.subject-list li span{margin-bottom:10px;text-align:center}.settings-section{padding:10px}.api-status-message{padding:8px}}
-@media (max-width:480px){body{padding:4px}.container{padding:4px;border-radius:8px}.header h1,.tasks-header h1{font-size:1em}.btn{padding:8px 10px;font-size:.85em;width:100%;margin:2px 0}.btn-sm{padding:6px 10px}.tasks-table th{display:none}.tasks-table td{display:block;width:100%;text-align:right;padding:6px 8px;position:relative;padding-left:50%}.tasks-table td:before{content:attr(data-label);position:absolute;left:8px;width:45%;text-align:left;font-weight:700}.tasks-table .actions{text-align:center}.form-container-large{padding:5px;margin:5px auto}.auth-form-container{padding:5px;width:99%}}
+
+@media (max-width:900px){
+.container{padding:12px}
+.form-container-large{padding:12px}
+.auth-form-container{padding:12px;width:97%}
+.dashboard-section{padding:12px}
+}
+
+@media (max-width:768px){
+body{padding:8px}
+.container{padding:8px}
+.header,.tasks-header{flex-direction:column;align-items:flex-start}
+.header h1,.tasks-header h1{margin-bottom:15px;font-size:1.3em}
+.header .user-info,.tasks-header .user-info{margin-bottom:12px;flex-direction:column;align-items:flex-start;gap:8px}
+.header .actions,.tasks-header .actions{width:100%;justify-content:flex-start;margin-top:10px}
+.btn{padding:12px 20px;margin:2px;font-size:1em;min-height:44px;min-width:44px;width:100%} /* ボタンは基本幅100%に */
+.btn-sm{padding:8px 15px}
+.dashboard-section{padding:10px}
+.dashboard-grid{grid-template-columns:1fr}
+.quick-links ul{flex-direction:column;gap:8px}
+.quick-links li{width:100%}
+.quick-links li a{padding:14px;text-align:center;font-size:1em}
+.welcome-message{font-size:1em}
+/* テーブルは非表示にし、カードを表示 */
+.tasks-table{display:none!important}
+.task-cards{display:flex!important;flex-direction:column}
+.no-tasks{font-size:1em;padding:18px}
+.form-container-large{padding:10px}
+.form-container-large h1{font-size:1.1em}
+.auth-form-container{padding:10px;width:99%}
+.fc-header-toolbar{flex-direction:column!important;gap:10px!important}
+.fc-toolbar-chunk{width:100%!important;display:flex!important;justify-content:center!important;margin:5px 0!important}
+.fc-toolbar-title{font-size:1.2em!important}
+.fc-view-harness{height:400px!important}
+.subject-registration .form-inline{flex-direction:column}
+.subject-registration input[type=text]{margin-bottom:10px;width:100%}
+.subject-registration button{width:100%}
+.subject-list li{flex-direction:column;align-items:stretch}
+.subject-list li span{margin-bottom:10px;text-align:center}
+.settings-section{padding:10px}
+.api-status-message{padding:8px}
+}
+
+@media (max-width:480px){
+body{padding:4px}
+.container{padding:4px;border-radius:8px}
+.header h1,.tasks-header h1{font-size:1em}
+.btn{padding:8px 10px;font-size:.85em;width:100%;margin:2px 0} /* ボタンサイズ微調整 */
+.btn-sm{padding:6px 10px}
+/* テーブル非表示、カード表示は768pxルールを継承 */
+.form-container-large{padding:5px;margin:5px auto}
+.auth-form-container{padding:5px;width:99%}
+/* 768px以下で定義済みの .task-cards スタイルの微調整（もし必要なら） */
+.task-cards{gap:10px} /* カード間のギャップを少し詰める */
+.task-card{padding:12px 10px; margin-bottom:12px} /* カードのパディングとマージンを詰める */
+.task-card h3{font-size: 1.1em;}
+.task-card .task-details p{font-size: .95em;}
+}
+
+/* --- カード式課題一覧 (デフォルトは非表示) --- */
+.task-cards{display:none;gap:14px}
+.task-card{background:var(--card);border-radius:var(--rmain);box-shadow:0 2px 8px rgba(0,0,0,.07);padding:16px 14px;margin-bottom:16px;display:flex;flex-direction:column;gap:10px}
+.task-card h3{margin:0 0 8px 0;font-size:1.15em;color:var(--primary)}
+.task-card .task-details p{margin:2px 0;font-size:.97em}
+.task-card .task-actions{display:flex;gap:8px}
+.task-card .task-actions form{margin:0}
+
+/* --- 幅が広い場合（769px以上）はテーブルを表示し、カードを非表示 --- */
+@media (min-width:769px){
+.task-cards{display:none!important} /* カードを強制的に非表示 */
+/* .tasks-table の display:table; はデフォルトで適用されているか、必要なら明示 */
+.tasks-table{display:table!important} /* テーブルを強制的に表示（デフォルトがblock等に変更されている場合を考慮） */
+}

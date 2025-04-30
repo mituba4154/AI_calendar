@@ -32,6 +32,7 @@
         {% endwith %}
 
         {% if tasks %}
+            <!-- PC/タブレット用: テーブル -->
             <table class="tasks-table">
                 <thead>
                     <tr>
@@ -47,13 +48,13 @@
                 <tbody>
                     {% for task in tasks %}
                     <tr>
-                        <td>{{ task.title }}</td>
-                        <td>{{ task.subject_name if task.subject_name else '-' }}</td>
-                        <td>{{ task.period if task.period else '-' }}</td>
-                        <td>{{ task.due_date.strftime('%Y-%m-%d %H:%M') if task.due_date else '未設定' }}</td>
-                        <td>{{ task.priority }}</td>
-                        <td>{{ task.status }}</td>
-                        <td class="actions">
+                        <td data-label="課題名">{{ task.title }}</td>
+                        <td data-label="教科">{{ task.subject_name if task.subject_name else '-' }}</td>
+                        <td data-label="時間目">{{ task.period if task.period else '-' }}</td>
+                        <td data-label="締切日">{{ task.due_date.strftime('%Y-%m-%d %H:%M') if task.due_date else '未設定' }}</td>
+                        <td data-label="優先度">{{ task.priority }}</td>
+                        <td data-label="ステータス">{{ task.status }}</td>
+                        <td data-label="操作" class="actions">
                             <a href="{{ url_for('routes.edit_task', task_id=task.id) }}" class="btn btn-warning">編集</a>
                             <form action="{{ url_for('routes.delete_task', task_id=task.id) }}" method="post">
                                 <button type="submit" class="btn btn-danger" onclick="return confirm('課題「{{ task.title }}」を本当に削除しますか？');">削除</button>
@@ -63,6 +64,28 @@
                     {% endfor %}
                 </tbody>
             </table>
+
+            <!-- スマホ用: カード -->
+            <div class="task-cards">
+              {% for task in tasks %}
+              <div class="task-card">
+                <h3>{{ task.title }}</h3>
+                <div class="task-details">
+                  <p><strong>教科:</strong> {{ task.subject_name if task.subject_name else '-' }}</p>
+                  <p><strong>時間目:</strong> {{ task.period if task.period else '-' }}</p>
+                  <p><strong>締切日:</strong> {{ task.due_date.strftime('%Y-%m-%d %H:%M') if task.due_date else '未設定' }}</p>
+                  <p><strong>優先度:</strong> {{ task.priority }}</p>
+                  <p><strong>ステータス:</strong> {{ task.status }}</p>
+                </div>
+                <div class="task-actions">
+                  <a href="{{ url_for('routes.edit_task', task_id=task.id) }}" class="btn btn-warning">編集</a>
+                  <form action="{{ url_for('routes.delete_task', task_id=task.id) }}" method="post">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('課題「{{ task.title }}」を本当に削除しますか？');">削除</button>
+                  </form>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
         {% else %}
             <p class="no-tasks">登録されている課題はありません。まずは「新しい課題を追加」から課題を登録しましょう。</p>
         {% endif %}

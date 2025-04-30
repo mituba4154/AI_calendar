@@ -1,3 +1,4 @@
+<!-- templates/dashboard.html -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -8,11 +9,16 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">
+        <div class="tasks-header">
             <h1>ダッシュボード</h1>
-            <div class="user-info">
-                ようこそ、{{ user_email }} さん
-                <a href="{{ url_for('routes.logout') }}" class="btn btn-danger btn-sm">ログアウト</a>
+            <div class="user-info">ようこそ、{{ user_email }} さん</div>
+            <div class="actions">
+                <a href="{{ url_for('routes.calendar') }}" class="btn btn-success">カレンダー</a>
+                <a href="{{ url_for('routes.tasks') }}" class="btn btn-primary">課題一覧</a>
+                <a href="{{ url_for('routes.settings') }}" class="btn btn-info">設定</a>
+                <a href="{{ url_for('routes.subjects') }}" class="btn btn-secondary">教科管理</a>
+                <a href="{{ url_for('routes.new_task') }}" class="btn btn-warning">新しい課題を追加</a>
+                <a href="{{ url_for('routes.logout') }}" class="btn btn-danger">ログアウト</a>
             </div>
         </div>
 
@@ -27,17 +33,6 @@
         {% endwith %}
 
         <p class="welcome-message">ここから各機能にアクセスできます。</p>
-
-        <div class="dashboard-section quick-links">
-             <h2>クイックアクセス</h2>
-             <ul>
-                 <li><a href="{{ url_for('routes.calendar') }}">カレンダー</a></li>
-                 <li><a href="{{ url_for('routes.tasks') }}">課題一覧</a></li>
-                 <li><a href="{{ url_for('routes.new_task') }}">新規課題</a></li>
-                 <li><a href="{{ url_for('routes.subjects') }}">教科管理</a></li>
-                 <li><a href="{{ url_for('routes.settings') }}">設定</a></li>
-             </ul>
-        </div>
 
         <div class="dashboard-grid">
             <div class="dashboard-section">
