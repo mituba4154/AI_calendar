@@ -8,37 +8,8 @@
 *   ユーザー管理はCLIコマンドで行います（Webからの新規登録はできません）。
 *   セキュリティ・運用・拡張性を考慮した設計です。
 
-## ディレクトリ構成
 
-```text
-.
-├── app.py                  # Flaskアプリ起動スクリプト
-├── app/
-│   ├── __init__.py         # アプリファクトリ・CLIコマンド
-│   ├── config.py           # 設定
-│   ├── extensions.py       # DB初期化
-│   ├── forms.py            # WTForms（未使用の場合あり）
-│   ├── models.py           # DBモデル
-│   ├── routes.py           # ルーティング・Webロジック
-│   ├── utils.py            # ユーティリティ
-│   └── templates/          # HTMLテンプレート
-│       ├── dashboard.html
-│       ├── tasks.html
-│       ├── ...
-│   └── static/
-│       └── style.css       # CSS（レスポンシブ・一貫デザイン）
-├── instance/
-│   └── database.db         # SQLite DB（.gitignore推奨）
-├── requirements.txt        # 必要パッケージ
-├── .gitignore              # DB・環境ファイル除外
-├── README.md               # このファイル
-├── start.bat/.sh           # 起動スクリプト
-├── stop.bat/.sh            # 停止スクリプト
-├── install.bat/.sh         # セットアップスクリプト
-└── その他ログ/設定ファイル
 
-```
-```text
 
 
 #セットアップ方法
@@ -117,3 +88,33 @@ Q. スマートフォンでUI表示が崩れる
 A. app/static/style.css を最新版に置き換えて、ブラウザのキャッシュをクリアしてみてください。
 Q. ログイン試行回数制限やCSRF対策を強化したい
 A. Flask-Limiter や Flask-WTF といったFlask拡張機能の導入を検討してください。これらを利用するには、コードの追加・修正が必要です。
+
+
+## ディレクトリ構成
+
+```text
+.
+├── app.py                  # Flaskアプリ起動スクリプト
+├── app/
+│   ├── __init__.py         # アプリファクトリ・CLIコマンド
+│   ├── config.py           # 設定
+│   ├── extensions.py       # DB初期化
+│   ├── forms.py            # WTForms（未使用の場合あり）
+│   ├── models.py           # DBモデル
+│   ├── routes.py           # ルーティング・Webロジック
+│   ├── utils.py            # ユーティリティ
+│   └── templates/          # HTMLテンプレート
+│       ├── dashboard.html
+│       ├── tasks.html
+│       ├── ...
+│   └── static/
+│       └── style.css       # CSS（レスポンシブ・一貫デザイン）
+├── instance/
+│   └── database.db         # SQLite DB（.gitignore推奨）
+├── requirements.txt        # 必要パッケージ
+├── .gitignore              # DB・環境ファイル除外
+├── README.md               # このファイル
+├── start.bat/.sh           # 起動スクリプト
+├── stop.bat/.sh            # 停止スクリプト
+├── install.bat/.sh         # セットアップスクリプト
+└── その他ログ/設定ファイル
