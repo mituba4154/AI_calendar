@@ -1,4 +1,6 @@
-# .gitignoreに追加
+instance/database.db
+# .gitignoreの内容を以下に示します。
+# Pythonの無視するファイル  
 .env
 instance/
 __pycache__/

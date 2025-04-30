@@ -1,87 +1,89 @@
-from flask import Flask
-import logging
 import os
+import logging
 import click
+from flask import Flask
 from werkzeug.security import generate_password_hash
-
-# SQLAlchemyインスタンスをextensionsからインポート
 from app.extensions import db
+from app.models import User
+from app.config import Config
 
 def create_app():
-    """アプリケーションファクトリ関数：設定を読み込み、Flaskアプリを作成して返す"""
-    app = Flask(__name__, static_folder='../static', template_folder='../templates')
-    
+    """アプリケーションファクトリ"""
+    app = Flask(
+        __name__,
+        static_folder='../static',
+        template_folder='../templates'
+    )
+
     # 設定の読み込み
-    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev_secret_key_should_be_changed_in_production')
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    
-    # 設定ファイルからの追加設定読み込み
-    from app.config import Config
     app.config.from_object(Config)
-    
-    # ロギング設定
+
+    # ロギング
     logging.basicConfig(level=logging.INFO)
-    
-    # データベースの初期化
+
+    # データベース初期化
     db.init_app(app)
-    
-    # ルーティングの登録
+
+    # Blueprint登録
     from app.routes import bp as routes_bp
     app.register_blueprint(routes_bp)
-    
-    # CLIコマンドを登録
+
+    # --- CLI: ユーザー作成 ---
     @app.cli.command("create-user")
     @click.argument("email")
     @click.password_option()
     def create_user(email, password):
-        from app.models import User
+        """メールアドレスとパスワードからユーザーを作成"""
         if '@' not in email:
             print("Error: 無効なメールアドレス形式です。")
             return
         if User.query.filter_by(email=email).first():
-            print(f"Error: メールアドレス '{email}' は既に使用されています。")
+            print(f"Error: '{email}' は既に存在します。")
             return
         if len(password) < 6:
-            print("Error: パスワードは6文字以上で設定してください。")
+            print("Error: パスワードは6文字以上必要です。")
             return
-            
-        hashed_password = generate_password_hash(password)
-        new_user = User(email=email, password_hash=hashed_password)
-        try:
-            db.session.add(new_user)
-            db.session.commit()
-            print(f"Success: ユーザー '{email}' が作成されました。")
-        except Exception as e:
-            db.session.rollback()
-            print(f"Error: ユーザー作成中にエラーが発生しました - {e}")
-    
-    # 起動時にデータベースの作成と確認
+        u = User(email=email, password_hash=generate_password_hash(password))
+        db.session.add(u)
+        db.session.commit()
+        print(f"Success: ユーザー '{email}' を作成しました。")
+
+    # --- CLI: ユーザー削除 ---
+    @app.cli.command("delete-user")
+    @click.argument("email")
+    def delete_user(email):
+        """メールアドレス指定でユーザーを削除"""
+        u = User.query.filter_by(email=email).first()
+        if not u:
+            print(f"Error: '{email}' は存在しません。")
+            return
+        db.session.delete(u)
+        db.session.commit()
+        print(f"Success: ユーザー '{email}' を削除しました。")
+
+    # --- CLI: ユーザー一覧 ---
+    @app.cli.command("list-users")
+    def list_users():
+        """登録済ユーザーの一覧を表示"""
+        users = User.query.order_by(User.id).all()
+        if not users:
+            print("ユーザーが存在しません。")
+            return
+        print("ID   | Email")
+        print("-----+------------------------")
+        for u in users:
+            print(f"{u.id:<4} | {u.email}")
+
+    # 起動時にDBテーブル作成＆デバッグユーザー作成
     with app.app_context():
-        from app.models import User, Subject, Task  # 循環インポートを避けるためここでインポート
         db.create_all()
-        app.logger.info("--- Database tables checked/created (if necessary) ---")
-        
-        # デバッグユーザー作成ロジック
-        DEBUG_SKIP_LOGIN_CHECK = app.config.get('DEBUG_SKIP_LOGIN_CHECK', False)
-        DEBUG_SKIP_LOGIN_EMAIL = app.config.get('DEBUG_SKIP_LOGIN_EMAIL', 'debug@example.com')
-        
-        if DEBUG_SKIP_LOGIN_CHECK and not User.query.filter_by(email=DEBUG_SKIP_LOGIN_EMAIL).first():
-            app.logger.warning(f"--- Creating default debug user: {DEBUG_SKIP_LOGIN_EMAIL} ---")
-            try:
-                hashed_password = generate_password_hash("debug")
-                debug_user = User(email=DEBUG_SKIP_LOGIN_EMAIL, password_hash=hashed_password)
-                db.session.add(debug_user)
+        if app.config.get('DEBUG_SKIP_LOGIN_CHECK'):
+            dbg = app.config.get('DEBUG_SKIP_LOGIN_EMAIL')
+            if not User.query.filter_by(email=dbg).first():
+                pwd = generate_password_hash("debug")
+                user = User(email=dbg, password_hash=pwd)
+                db.session.add(user)
                 db.session.commit()
-                app.logger.info(f"--- Default debug user created successfully. ---")
-            except Exception as e:
-                db.session.rollback()
-                app.logger.error(f"--- Error creating default debug user: {e} ---")
-        
-        # DEBUG_SKIP_LOGIN_CHECKが有効な場合は警告ログを出力
-        if DEBUG_SKIP_LOGIN_CHECK:
-            app.logger.critical("!!! DEBUG LOGIN BYPASS ENABLED !!!")
-            app.logger.warning(f"!!! Debug User Email: {DEBUG_SKIP_LOGIN_EMAIL} !!!")
-    
-    # アプリケーションオブジェクトを返す
+                app.logger.warning(f"Debug user '{dbg}' created.")
+
     return app
